@@ -54,6 +54,7 @@ const RightSideBar = () => {
               name={name}
               questions={questions}
               showCount
+              compact
             />
           ))}
         </div>

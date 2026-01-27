@@ -13,6 +13,7 @@ import debounce from "lodash/debounce";
 
 interface SearchProps {
   Icon?: LucideIcon;
+  iconPosition?: "inline-start" | "inline-end";
   placeholder?: string;
   otherClasses?: string;
   route: string;
@@ -22,6 +23,7 @@ const Search = ({
   Icon = DefaultSearchIcon,
   placeholder = "Search...",
   otherClasses = "",
+  iconPosition = "inline-start",
   route,
 }: SearchProps) => {
   const pathname = usePathname();
@@ -30,6 +32,7 @@ const Search = ({
   const query = searchParams.get("query") || "";
   const [searchQuery, setSearchQuery] = useState(query);
   const searchParamsString = searchParams.toString();
+  const DEBOUNCE_DELAY_MS = 300;
 
   const debouncedUpdate = useMemo(
     () =>
@@ -48,7 +51,7 @@ const Search = ({
             : null;
 
         if (newUrl) router.replace(newUrl, { scroll: false });
-      }, 300),
+      }, DEBOUNCE_DELAY_MS),
     [router, pathname, route, searchParamsString],
   );
 
@@ -65,7 +68,7 @@ const Search = ({
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
-      <InputGroupAddon>
+      <InputGroupAddon align={iconPosition}>
         <Icon />
       </InputGroupAddon>
     </InputGroup>

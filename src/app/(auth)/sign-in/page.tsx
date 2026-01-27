@@ -1,5 +1,6 @@
 "use client";
 
+import { signInWithCredentials } from "@/features/auth/actions/auth.action";
 import AuthForm from "@/features/auth/components/auth-form";
 import { SignInSchema } from "@/features/auth/schema/auth-schema";
 
@@ -9,7 +10,7 @@ const SignIn = () => {
       formType="SIGN_IN"
       schema={SignInSchema}
       defaultValues={{ email: "", password: "" }}
-      onSubmit={(data) => Promise.resolve({ success: true, data })}
+      onSubmit={signInWithCredentials}
     />
   );
 };

@@ -184,14 +184,6 @@
   }
 }
 
-@utility no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
 @utility flex-center {
   display: flex;
   align-items: center;
@@ -217,4 +209,75 @@
 
 @utility markdown-editor {
   @apply prose max-w-full! dark:prose-h1:text-white dark:prose-h2:text-white dark:prose-h3:text-white dark:prose-h4:text-white dark:prose-h5:text-white dark:prose-h6:text-white dark:prose-p:text-white  dark:prose-ul:text-white  dark:prose-ol:text-white dark:prose-strong:text-white prose-blockquote:text-white dark:prose-blockquote:text-white dark:prose-code:text-white;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.mdxeditor-toolbar {
+  background: #ffffff !important;
+}
+
+.dark .mdxeditor-toolbar {
+  background: #151821 !important;
+}
+
+.dark .mdxeditor-toolbar button svg {
+  color: #858ead !important;
+}
+
+.dark .mdxeditor-toolbar button:hover svg {
+  color: #000 !important;
+}
+
+.dark .mdxeditor-toolbar [role="separator"] {
+  border-color: #555 !important;
+}
+
+.markdown a {
+  color: #1da1f2;
+}
+
+.markdown a,
+code {
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+
+  padding: 2px;
+}
+
+[data-lexical-editor="true"] {
+  height: 350px !important;
+  overflow-y: auto !important;
+}
+
+/* NESTED CODE BLOCKS: Only apply grid to visible code blocks */
+[data-bright-mode="dark"]:not(html.light [data-bright-mode="dark"]),
+[data-bright-mode="light"]:not(:not(html.light [data-bright-mode="light"])) {
+  display: grid !important;
+  width: 100% !important;
+}
+
+@utility markdown {
+  @apply !max-w-full prose prose-p:my-2 prose-ol:my-0 prose-ul:my-0 dark:prose-p:text-white dark:prose-ol:text-white dark:prose-ul:text-white dark:prose-strong:text-white dark:prose-headings:text-white prose-headings:text-white dark:prose-blockquote:text-white dark:prose-code:text-white;
 }

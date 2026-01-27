@@ -6,6 +6,7 @@ import TagCard from "@/features/tags/components/tag-card";
 import { Metric } from "./metric";
 import { Eye, MessageCircle, ThumbsUp } from "lucide-react";
 import { formatNumber } from "../lib/formatNumber";
+import type { Question, Tags } from "@/shared/types/global";
 
 interface Props {
   question: Question;

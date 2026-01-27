@@ -1,7 +1,5 @@
 "use client";
 
-
-
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -10,14 +8,13 @@ import React from "react";
 import ROUTES from "@/shared/constants/routes";
 import { navigationLinks } from "@/shared/constants/navigation-links";
 
-
 interface NavLinksProps {
   isMobileNav?: boolean;
+  userId?: string;
 }
 
-const NavLinks = ({ isMobileNav = false }: NavLinksProps) => {
+const NavLinks = ({ isMobileNav = false, userId }: NavLinksProps) => {
   const pathname = usePathname();
-  const userId = 1;
 
   return (
     <>

@@ -1,7 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 import { cn } from "@/shared/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui";

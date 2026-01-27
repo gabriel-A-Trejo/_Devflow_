@@ -57,7 +57,13 @@ import {
   InputGroupTextarea,
 } from "@/shared/components/ui/input-group";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/shared/components/ui/avatar";
+
+import { Spinner } from "./spinner";
 
 export {
   Button,
@@ -103,4 +109,5 @@ export {
   Avatar,
   AvatarFallback,
   AvatarImage,
+  Spinner,
 };

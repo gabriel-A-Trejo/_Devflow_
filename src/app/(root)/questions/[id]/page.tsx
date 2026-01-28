@@ -1,3 +1,4 @@
+import { getAnswers } from "@/features/answer/actions/get-answer.action";
 import AnswerForm from "@/features/answer/components/answer-form";
 import Preview from "@/features/editor/Preview";
 import {
@@ -26,6 +27,17 @@ const QuestionDetails = async ({ params }: RouteParams) => {
   after(async () => [await incrementViews({ questionId: id })]);
 
   if (!success || !question) return redirect("/404");
+
+  const {
+    success: areAnswerLoaded,
+    data: answerResult,
+    error: answersError,
+  } = await getAnswers({
+    questionId: id,
+    page: 1,
+    pageSize: 10,
+    filter: "latest",
+  });
 
   const { author, createdAt, answers, views, tags, content, title } = question;
 

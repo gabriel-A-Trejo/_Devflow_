@@ -1,5 +1,6 @@
 import Preview from "@/features/editor/Preview";
 import { getTimeStamp } from "@/features/question/lib/getTimeStamp";
+import Votes from "@/features/votes/votes";
 import CompactCard from "@/shared/components/compact/compact-card";
 import UserAvatar from "@/shared/components/navigation/navbar/userAvatar";
 import ROUTES from "@/shared/constants/routes";
@@ -42,7 +43,7 @@ const AnswerCard = ({ _id, author, content, createdAt }: Answer) => {
               </p>
             </div>
 
-            <div className="flex items-center gap-2 shrink-0">Votes</div>
+            <Votes />
           </div>
 
           <Preview content={content} />

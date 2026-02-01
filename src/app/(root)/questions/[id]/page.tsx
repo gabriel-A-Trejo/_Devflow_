@@ -10,6 +10,7 @@ import { Metric } from "@/features/question/components/metric";
 import { formatNumber } from "@/features/question/lib/formatNumber";
 import { getTimeStamp } from "@/features/question/lib/getTimeStamp";
 import TagCard from "@/features/tags/components/tag-card";
+import Votes from "@/features/votes/votes";
 import { Heading } from "@/shared/components/header/heading";
 import UserAvatar from "@/shared/components/navigation/navbar/userAvatar";
 import ROUTES from "@/shared/constants/routes";
@@ -59,7 +60,12 @@ const QuestionDetails = async ({ params }: RouteParams) => {
             </Link>
           </div>
           <div className="flex justify-end">
-            <p>Votes</p>
+            <Votes
+              upvotes={question.upvotes}
+              hasUpVoted={true}
+              downvotes={question.downvotes}
+              hasDownVoted={false}
+            />
           </div>
         </div>
         <Heading className="mt-1"> {title} </Heading>

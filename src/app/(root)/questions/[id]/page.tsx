@@ -10,7 +10,7 @@ import { Metric } from "@/features/question/components/metric";
 import { formatNumber } from "@/features/question/lib/formatNumber";
 import { getTimeStamp } from "@/features/question/lib/getTimeStamp";
 import TagCard from "@/features/tags/components/tag-card";
-import Votes from "@/features/votes/votes";
+import Votes from "@/features/votes/components/votes";
 import { Heading } from "@/shared/components/header/heading";
 import UserAvatar from "@/shared/components/navigation/navbar/userAvatar";
 import ROUTES from "@/shared/constants/routes";

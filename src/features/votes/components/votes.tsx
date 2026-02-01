@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
-import { formatNumber } from "../question/lib/formatNumber";
+import { formatNumber } from "../../question/lib/formatNumber";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 

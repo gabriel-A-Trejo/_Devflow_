@@ -1,6 +1,6 @@
 import Preview from "@/features/editor/Preview";
 import { getTimeStamp } from "@/features/question/lib/getTimeStamp";
-import Votes from "@/features/votes/votes";
+import Votes from "@/features/votes/components/votes";
 import CompactCard from "@/shared/components/compact/compact-card";
 import UserAvatar from "@/shared/components/navigation/navbar/userAvatar";
 import ROUTES from "@/shared/constants/routes";

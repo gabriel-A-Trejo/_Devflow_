@@ -12,6 +12,7 @@ import {
 interface CompactCardProps {
   cardClassName?: string;
   title: string;
+  contentClassName?: string;
   headerClassName?: string;
   titleClassName?: string;
   description?: string;
@@ -28,6 +29,7 @@ const CompactCard = ({
   content,
   action,
   footer,
+  contentClassName,
 }: CompactCardProps) => {
   return (
     <Card className={cardClassName}>
@@ -37,7 +39,7 @@ const CompactCard = ({
         <CardAction>{action}</CardAction>
       </CardHeader>
 
-      <CardContent>{content}</CardContent>
+      <CardContent className={contentClassName}>{content}</CardContent>
       {footer && <CardFooter>{footer}</CardFooter>}
     </Card>
   );

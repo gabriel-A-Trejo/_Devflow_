@@ -1,4 +1,5 @@
 import { getAnswers } from "@/features/answer/actions/get-answer.action";
+import AllAnswers from "@/features/answer/components/all-answers";
 import AnswerForm from "@/features/answer/components/answer-form";
 import Preview from "@/features/editor/Preview";
 import {
@@ -98,6 +99,15 @@ const QuestionDetails = async ({ params }: RouteParams) => {
           />
         ))}
       </div>
+
+      <section className="my-5">
+        <AllAnswers
+          data={answerResult?.answer}
+          success={areAnswerLoaded}
+          error={answersError}
+          totalAnswers={answerResult?.totalAnswers!}
+        />
+      </section>
 
       <section className="my-5">
         <AnswerForm questionId={question._id} />

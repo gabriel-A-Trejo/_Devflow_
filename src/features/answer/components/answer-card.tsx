@@ -9,7 +9,7 @@ import Link from "next/link";
 const AnswerCard = ({ _id, author, content, createdAt }: Answer) => {
   return (
     <CompactCard
-      cardClassName="border-none p-0 bg-background shadow-none  "
+      cardClassName="border-none p-0 bg-background shadow-none mb-20 "
       contentClassName="p-0 mt-5 "
       title={_id}
       titleClassName="sr-only  "
@@ -38,7 +38,7 @@ const AnswerCard = ({ _id, author, content, createdAt }: Answer) => {
 
               <p className="text-sm whitespace-nowrap text-muted-foreground ml-7 sm:ml-0">
                 <span className="max-sm:hidden">• </span>
-                answered {getTimeStamp(createdAt)}
+                Answered {getTimeStamp(createdAt)}
               </p>
             </div>
 

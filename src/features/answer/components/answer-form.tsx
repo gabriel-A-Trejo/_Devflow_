@@ -10,19 +10,29 @@ import type { MDXEditorMethods } from "@mdxeditor/editor";
 import {
   Button,
   Field,
+  FieldDescription,
   FieldError,
   Spinner,
   toast,
 } from "@/shared/components/ui";
 import { Sparkles } from "lucide-react";
 import { CreateAnswer } from "../actions/create-answer.action";
+import { useSession } from "next-auth/react";
+import { api } from "@/shared/lib/api";
 
 const Editor = dynamic(() => import("@/features/editor"), {
   ssr: false,
 });
-const AnswerForm = ({ questionId }: { questionId: string }) => {
+
+interface Props {
+  questionId: string;
+  questionTitle: string;
+  questionContent: string;
+}
+const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
   const [isAnswering, startAnswerTransition] = useTransition();
   const [isAISubmitting, setIsAISubmitting] = useState(false);
+  const session = useSession();
 
   const editorRef = useRef<MDXEditorMethods>(null);
 
@@ -41,21 +51,68 @@ const AnswerForm = ({ questionId }: { questionId: string }) => {
       if (result.success) {
         form.reset();
         toast.success("Your answer has been posted successfully");
+        if (editorRef.current) {
+          editorRef.current.setMarkdown("");
+        }
       } else {
         toast.error(result.error?.message);
       }
     });
   };
 
+  const generateAIAnswer = async () => {
+    if (session.status !== "authenticated")
+      return toast.error("Please log in", {
+        description: "You need to be logged in to use this feature.",
+      });
+    setIsAISubmitting(true);
+
+    const userAnswer = editorRef.current?.getMarkdown();
+
+    try {
+      const { success, data, error } = await api.ai.getAnswer(
+        questionTitle,
+        questionContent,
+        userAnswer,
+      );
+
+      if (!success) {
+        return toast.error("Error", { description: error?.message });
+      }
+
+      const formattedAnswer =
+        data?.replace(/<br>/g, " ").toString().trim() ?? " ";
+      if (editorRef.current) {
+        editorRef.current.setMarkdown(formattedAnswer);
+        form.setValue("content", formattedAnswer);
+        form.trigger("content");
+      }
+
+      toast.success("Success", {
+        description: "AI generated answer has been generated.",
+      });
+    } catch (error) {
+      toast.error("Error", {
+        description:
+          error instanceof Error
+            ? error.message
+            : "There was a problem with your request",
+      });
+    } finally {
+      setIsAISubmitting(false);
+    }
+  };
+
   return (
-    <div>
-      <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2 ">
+    <div className="border-t border-muted-foreground ">
+      <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2 mt-7">
         <h4 className="font-semibold text-xl ">Write your answer here</h4>
         <Button
           disabled={isAISubmitting}
+          onClick={generateAIAnswer}
           className="rounded-lg cursor-pointer  "
         >
-          {isAnswering ? (
+          {isAISubmitting ? (
             <>
               <Spinner /> Generating...
             </>

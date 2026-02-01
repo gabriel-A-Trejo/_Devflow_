@@ -3,7 +3,7 @@ import { fetchHandler } from "./handlers/fetch";
 
 import type { IAccount } from "@/database/account.model";
 import type { SignWithOAuthParams } from "../types/action";
-import { APIResponse } from "../types/global";
+import type { ActionResponses } from "../types/global";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000/api";
@@ -63,10 +63,15 @@ export const api = {
       }),
   },
   ai: {
-    getAnswer: (question: string, content: string) =>
+    getAnswer: (
+      question: string,
+      content: string,
+      userAnswer: string | undefined,
+    ): Promise<ActionResponses<string>> =>
       fetchHandler(`${API_BASE_URL}/ai/answers`, {
         method: "POST",
-        body: JSON.stringify({ question, content }),
+        body: JSON.stringify({ question, content, userAnswer }),
+        timeout: 28000,
       }),
   },
 };

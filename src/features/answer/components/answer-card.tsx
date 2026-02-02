@@ -1,13 +1,23 @@
 import Preview from "@/features/editor/Preview";
 import { getTimeStamp } from "@/features/question/lib/getTimeStamp";
+import { hasVoted } from "@/features/tags/actions/has-voted.action";
 import Votes from "@/features/votes/components/votes";
 import CompactCard from "@/shared/components/compact/compact-card";
 import UserAvatar from "@/shared/components/navigation/navbar/userAvatar";
 import ROUTES from "@/shared/constants/routes";
 import type { Answer } from "@/shared/types/global";
 import Link from "next/link";
+import { Suspense } from "react";
 
-const AnswerCard = ({ _id, author, content, createdAt }: Answer) => {
+const AnswerCard = ({
+  _id,
+  author,
+  content,
+  createdAt,
+  upvotes,
+  downvotes,
+}: Answer) => {
+  const hasVotedPromise = hasVoted({ targetId: _id, targetType: "answer" });
   return (
     <CompactCard
       cardClassName="border-none p-0 bg-background shadow-none mb-20 "
@@ -42,6 +52,15 @@ const AnswerCard = ({ _id, author, content, createdAt }: Answer) => {
                 Answered {getTimeStamp(createdAt)}
               </p>
             </div>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Votes
+                targetType="answer"
+                targetId={_id}
+                hasVotedPromise={hasVotedPromise}
+                upvotes={upvotes}
+                downvotes={downvotes}
+              />
+            </Suspense>
           </div>
 
           <Preview content={content} />

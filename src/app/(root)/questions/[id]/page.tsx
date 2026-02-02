@@ -9,6 +9,7 @@ import {
 import { Metric } from "@/features/question/components/metric";
 import { formatNumber } from "@/features/question/lib/formatNumber";
 import { getTimeStamp } from "@/features/question/lib/getTimeStamp";
+import { hasVoted } from "@/features/tags/actions/has-voted.action";
 import TagCard from "@/features/tags/components/tag-card";
 import Votes from "@/features/votes/components/votes";
 import { Heading } from "@/shared/components/header/heading";
@@ -20,6 +21,7 @@ import { Clock3, Eye, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
+import { Suspense } from "react";
 
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
@@ -41,6 +43,11 @@ const QuestionDetails = async ({ params }: RouteParams) => {
     filter: "latest",
   });
 
+  const hasVotedPromise = hasVoted({
+    targetId: question._id,
+    targetType: "question",
+  });
+
   const { author, createdAt, answers, views, tags, content, title } = question;
 
   return (
@@ -60,12 +67,15 @@ const QuestionDetails = async ({ params }: RouteParams) => {
             </Link>
           </div>
           <div className="flex justify-end">
-            <Votes
-              upvotes={question.upvotes}
-              hasUpVoted={true}
-              downvotes={question.downvotes}
-              hasDownVoted={false}
-            />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Votes
+                upvotes={question.upvotes}
+                downvotes={question.downvotes}
+                targetType="question"
+                targetId={question._id}
+                hasVotedPromise={hasVotedPromise}
+              />
+            </Suspense>
           </div>
         </div>
         <Heading className="mt-1"> {title} </Heading>

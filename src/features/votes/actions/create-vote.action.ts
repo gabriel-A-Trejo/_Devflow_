@@ -8,6 +8,8 @@ import handleError from "@/shared/lib/handlers/errors";
 import mongoose from "mongoose";
 import { Vote } from "@/database";
 import { updateVoteCount } from "./update-vote.action";
+import { revalidatePath } from "next/cache";
+import ROUTES from "@/shared/constants/routes";
 
 export async function createVote(
   params: CreateVotesParams,
@@ -56,9 +58,20 @@ export async function createVote(
         );
       }
     } else {
-      await Vote.create([{ targetId, targetType, voteType, change: 1 }], {
-        session,
-      });
+      await Vote.create(
+        [
+          {
+            author: userId,
+            actionId: targetId,
+            actionType: targetType,
+            voteType,
+            change: 1,
+          },
+        ],
+        {
+          session,
+        },
+      );
       await updateVoteCount(
         { targetId, targetType, voteType, change: 1 },
         session,
@@ -67,6 +80,8 @@ export async function createVote(
 
     await session.commitTransaction();
     session.endSession();
+
+    revalidatePath(ROUTES.QUESTION(targetId));
     return { success: true };
   } catch (error) {
     if (session.inTransaction()) {

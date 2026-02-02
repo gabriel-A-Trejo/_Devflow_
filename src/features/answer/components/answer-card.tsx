@@ -42,8 +42,6 @@ const AnswerCard = ({ _id, author, content, createdAt }: Answer) => {
                 Answered {getTimeStamp(createdAt)}
               </p>
             </div>
-
-            <Votes />
           </div>
 
           <Preview content={content} />

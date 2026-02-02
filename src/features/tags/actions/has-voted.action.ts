@@ -29,14 +29,14 @@ export async function hasVoted(
     if (!vote)
       return {
         success: false,
-        data: { hasUpvoted: false, hasDownvoted: false },
+        data: { hasUpVoted: false, hasDownVoted: false },
       };
 
     return {
       success: true,
       data: {
-        hasUpvoted: vote.voteType === "upvote",
-        hasDownvoted: vote.voteType === "downvote",
+        hasUpVoted: vote.voteType === "upvote",
+        hasDownVoted: vote.voteType === "downvote",
       },
     };
   } catch (error) {

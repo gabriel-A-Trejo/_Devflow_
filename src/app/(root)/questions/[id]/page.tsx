@@ -1,6 +1,7 @@
 import { getAnswers } from "@/features/answer/actions/get-answer.action";
 import AllAnswers from "@/features/answer/components/all-answers";
 import AnswerForm from "@/features/answer/components/answer-form";
+import SaveQuestion from "@/features/collections/components/save-question";
 import Preview from "@/features/editor/Preview";
 import {
   getQuestionById,
@@ -14,6 +15,7 @@ import TagCard from "@/features/tags/components/tag-card";
 import Votes from "@/features/votes/components/votes";
 import { Heading } from "@/shared/components/header/heading";
 import UserAvatar from "@/shared/components/navigation/navbar/userAvatar";
+import { Spinner } from "@/shared/components/ui";
 import ROUTES from "@/shared/constants/routes";
 import type { RouteParams, Tags } from "@/shared/types/global";
 import { Clock3, Eye, MessageCircle } from "lucide-react";
@@ -66,8 +68,8 @@ const QuestionDetails = async ({ params }: RouteParams) => {
               <p className="font-semibold">{author.name}</p>
             </Link>
           </div>
-          <div className="flex justify-end">
-            <Suspense fallback={<div>Loading...</div>}>
+          <div className="flex justify-end gap-4">
+            <Suspense fallback={<Spinner />}>
               <Votes
                 upvotes={question.upvotes}
                 downvotes={question.downvotes}
@@ -75,6 +77,9 @@ const QuestionDetails = async ({ params }: RouteParams) => {
                 targetId={question._id}
                 hasVotedPromise={hasVotedPromise}
               />
+            </Suspense>
+            <Suspense fallback={<Spinner />}>
+              <SaveQuestion questionId={question._id} />
             </Suspense>
           </div>
         </div>

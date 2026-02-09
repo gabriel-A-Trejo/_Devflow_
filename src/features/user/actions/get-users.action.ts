@@ -7,10 +7,11 @@ import type {
   PaginatedSearchParams,
   User as UserType,
 } from "@/shared/types/global";
-import { PaginatedSearchSchema } from "../search/schema/paginated-search-schema";
+
 import handleError from "@/shared/lib/handlers/errors";
-import { QueryFilter } from "mongoose";
+import type { QueryFilter } from "mongoose";
 import { User } from "@/database";
+import { PaginatedSearchSchema } from "@/features/search/schema/paginated-search-schema";
 
 export async function getUsers(
   params: PaginatedSearchParams,

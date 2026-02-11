@@ -1,16 +1,24 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { use, useState } from "react";
 import { Star } from "lucide-react";
 import { toast } from "sonner";
 import { toggleSaveQuestion } from "../actions/toggle-save-question.action";
+import { ActionResponses } from "@/shared/types/global";
 
-const SaveQuestion = ({ questionId }: { questionId: string }) => {
+const SaveQuestion = ({
+  questionId,
+  hasSavedQuestionPromise,
+}: {
+  questionId: string;
+  hasSavedQuestionPromise: Promise<ActionResponses<{ isSaved: boolean }>>;
+}) => {
   const session = useSession();
   const userId = session?.data?.user?.id;
   const [isLoading, setIsLoading] = useState(false);
-  let hasSaved = false;
+  const { data } = use(hasSavedQuestionPromise);
+  const { isSaved } = data || {};
 
   const handleSave = async () => {
     if (isLoading) return;
@@ -27,7 +35,6 @@ const SaveQuestion = ({ questionId }: { questionId: string }) => {
       toast.success(
         `Question ${data?.isSaved ? "saved" : "unsaved"} successfully`,
       );
-      hasSaved = true;
     } catch (error) {
       toast.error("Error", {
         description:
@@ -40,8 +47,10 @@ const SaveQuestion = ({ questionId }: { questionId: string }) => {
 
   return (
     <Star
-      className={`cursor-pointer ${isLoading && "opacity-50"} text-primary ${hasSaved && "fill-primary"}`}
-      arial-label="Save Question"
+      className={`cursor-pointer ${isLoading ? "opacity-50" : ""} text-primary ${
+        isSaved ? "fill-primary" : "fill-none"
+      }`}
+      aria-label="Save Question"
       onClick={handleSave}
     />
   );

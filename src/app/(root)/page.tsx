@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import HomeFilter from "@/features/filters/components/HomeFilter";
 import { getQuestions } from "@/features/question/actions/question.action";
 import QuestionCard from "@/features/question/components/question-card";
@@ -9,7 +8,6 @@ import { buttonVariants } from "@/shared/components/ui/button";
 import ROUTES from "@/shared/constants/routes";
 import { EMPTY_QUESTION } from "@/shared/constants/states";
 import { cn } from "@/shared/lib/utils";
-import type { Question } from "@/shared/types/global";
 
 import Link from "next/link";
 
@@ -28,18 +26,6 @@ const Home = async ({ searchParams }: SearchParams) => {
   });
 
   const { questions } = data || {};
-
-  // const filteredQuestions = questions.filter((question) => {
-  //   const matchesQuery = question.title
-  //     .toLowerCase()
-  //     .includes(query.toLowerCase());
-  //   const matchesFilter = filter
-  //     ? question.tags.some(
-  //         (tag) => tag.name.toLowerCase() === filter.toLowerCase(),
-  //       )
-  //     : true;
-  //   return matchesFilter && matchesQuery;
-  // });
 
   return (
     <>
@@ -77,25 +63,6 @@ const Home = async ({ searchParams }: SearchParams) => {
           </div>
         )}
       />
-      {/* {success ? (
-        <div className="mt-10 flex w-full flex-col gap-6 ">
-          {questions && questions.length > 0 ? (
-            questions.map((question) => (
-              <QuestionCard key={question._id} question={question} />
-            ))
-          ) : (
-            <div className="mt-10 flex w-full items-center justify-center">
-              <p className="text">No questions found</p>
-            </div>
-          )}
-        </div>
-      ) : (
-        <div className="mt-10 flex items-center justify-center">
-          <p className="text">
-            {error?.message || "Failed to fetch questions"}
-          </p>
-        </div>
-      )} */}
     </>
   );
 };

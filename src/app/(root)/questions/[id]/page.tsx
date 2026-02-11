@@ -1,7 +1,7 @@
 import { getAnswers } from "@/features/answer/actions/get-answer.action";
 import AllAnswers from "@/features/answer/components/all-answers";
 import AnswerForm from "@/features/answer/components/answer-form";
-import { hasSavedQuestion } from "@/features/collections/actions/has-saved-question";
+import { hasSavedQuestion } from "@/features/collections/actions/has-saved-question.action";
 import SaveQuestion from "@/features/collections/components/save-question";
 import Preview from "@/features/editor/Preview";
 import {

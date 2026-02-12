@@ -1,11 +1,12 @@
 import { getSavedQuestion } from "@/features/collections/actions/get-saved-questions.action";
-import HomeFilter from "@/features/filters/components/HomeFilter";
+import Filter from "@/features/filters/components/Filter";
 import QuestionCard from "@/features/question/components/question-card";
 import Search from "@/features/search";
 import DataRenderer from "@/shared/components/data-renderer";
 import { Heading } from "@/shared/components/header/heading";
+import { CollectionFilters } from "@/shared/constants/filters";
 import ROUTES from "@/shared/constants/routes";
-import { EMPTY_COLLECTIONS, EMPTY_QUESTION } from "@/shared/constants/states";
+import { EMPTY_QUESTION } from "@/shared/constants/states";
 
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
@@ -35,7 +36,7 @@ const Collections = async ({ searchParams }: SearchParams) => {
           otherClasses="flex-1"
         />
       </section>
-      <HomeFilter />
+      <Filter filters={CollectionFilters} />
 
       <DataRenderer
         success={success}

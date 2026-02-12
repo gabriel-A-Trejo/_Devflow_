@@ -1,8 +1,10 @@
+import Filter from "@/features/filters/components/Filter";
 import Search from "@/features/search";
 import { getUsers } from "@/features/user/actions/get-users.action";
 import UserCard from "@/features/user/components/user-card";
 import DataRenderer from "@/shared/components/data-renderer";
 import { Heading } from "@/shared/components/header/heading";
+import { UserFilters } from "@/shared/constants/filters";
 import ROUTES from "@/shared/constants/routes";
 import { EMPTY_USERS } from "@/shared/constants/states";
 import type { RouteParams } from "@/shared/types/global";
@@ -27,6 +29,7 @@ const Community = async ({ searchParams }: RouteParams) => {
           route={ROUTES.COMMUNITIES}
           placeholder="There are great developers here!"
         />
+        <Filter filters={UserFilters} />
       </div>
 
       <DataRenderer

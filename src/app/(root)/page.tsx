@@ -1,10 +1,12 @@
-import HomeFilter from "@/features/filters/components/HomeFilter";
+import Filter from "@/features/filters/components/Filter";
+import HomeFilter from "@/features/filters/components/Filter";
 import { getQuestions } from "@/features/question/actions/question.action";
 import QuestionCard from "@/features/question/components/question-card";
 import Search from "@/features/search";
 import DataRenderer from "@/shared/components/data-renderer";
 import { Heading } from "@/shared/components/header/heading";
 import { buttonVariants } from "@/shared/components/ui/button";
+import { HomePageFilters } from "@/shared/constants/filters";
 import ROUTES from "@/shared/constants/routes";
 import { EMPTY_QUESTION } from "@/shared/constants/states";
 import { cn } from "@/shared/lib/utils";
@@ -48,7 +50,7 @@ const Home = async ({ searchParams }: SearchParams) => {
           otherClasses="flex-1"
         />
       </section>
-      <HomeFilter />
+      <Filter filters={HomePageFilters} />
 
       <DataRenderer
         success={success}

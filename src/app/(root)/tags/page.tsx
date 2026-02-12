@@ -1,8 +1,10 @@
+import Filter from "@/features/filters/components/Filter";
 import Search from "@/features/search";
 import { getTags } from "@/features/tags/actions/get-tag.actions";
 import TagCard from "@/features/tags/components/tag-card";
 import DataRenderer from "@/shared/components/data-renderer";
 import { Heading } from "@/shared/components/header/heading";
+import { TagFilters } from "@/shared/constants/filters";
 import ROUTES from "@/shared/constants/routes";
 import { EMPTY_TAGS } from "@/shared/constants/states";
 import type { RouteParams } from "@/shared/types/global";
@@ -28,6 +30,7 @@ const Tags = async ({ searchParams }: RouteParams) => {
           otherClasses="flex-1"
         />
       </section>
+      <Filter filters={TagFilters} />
 
       <DataRenderer
         success={success}

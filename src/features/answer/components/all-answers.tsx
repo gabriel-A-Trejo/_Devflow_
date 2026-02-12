@@ -2,6 +2,8 @@ import DataRenderer from "@/shared/components/data-renderer";
 import { EMPTY_ANSWERS } from "@/shared/constants/states";
 import type { ActionResponses, Answer } from "@/shared/types/global";
 import AnswerCard from "./answer-card";
+import { AnswerFilters } from "@/shared/constants/filters";
+import Filter from "@/features/filters/components/Filter";
 
 interface Props extends ActionResponses<Answer[]> {
   totalAnswers: number;
@@ -16,7 +18,7 @@ const AllAnswers = ({ data, success, error, totalAnswers }: Props) => {
             {totalAnswers} {totalAnswers === 1 ? "Answer" : "Answers"}
           </h3>
         )}
-        <p>Filters</p>
+        <Filter filters={AnswerFilters} showToggleOnly />
       </div>
       <DataRenderer
         data={data}

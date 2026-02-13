@@ -14,8 +14,8 @@ import { Answer, Question, User } from "@/database";
 export async function getUser(params: GetUserParams): Promise<
   ActionResponses<{
     user: UserType;
-    totalQuestion: number;
-    totalAnswer: number;
+    totalQuestions: number;
+    totalAnswers: number;
   }>
 > {
   const validationResult = await action({
@@ -29,7 +29,7 @@ export async function getUser(params: GetUserParams): Promise<
   const { userId } = params;
 
   try {
-    const [user, totalQuestion, totalAnswer] = await Promise.all([
+    const [user, totalQuestions, totalAnswers] = await Promise.all([
       User.findById(userId),
       Question.countDocuments({ author: userId }),
       Answer.countDocuments({ author: userId }),
@@ -41,8 +41,8 @@ export async function getUser(params: GetUserParams): Promise<
       success: true,
       data: {
         user: JSON.parse(JSON.stringify(user)),
-        totalQuestion,
-        totalAnswer,
+        totalQuestions,
+        totalAnswers,
       },
     };
   } catch (error) {

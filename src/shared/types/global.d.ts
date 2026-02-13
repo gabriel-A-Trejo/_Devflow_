@@ -78,3 +78,16 @@ interface Collection {
   author: Author;
   question: Question;
 }
+
+interface User {
+  _id: string;
+  name: string;
+  userName: string;
+  email: string;
+  bio?: string;
+  image?: string;
+  location?: string;
+  portfolio?: string;
+  reputation?: number;
+  createdAt: Date;
+}

@@ -8,12 +8,10 @@ import DataRenderer from "../data-renderer";
 import { getTopTag } from "@/features/tags/actions/get-top-tag.action";
 
 const RightSideBar = async () => {
-  const { success, data: hotQuestion, error } = await getTopQuestion();
-  const {
-    success: tagSuccess,
-    data: popularTags,
-    error: errorTags,
-  } = await getTopTag();
+  const [
+    { success, data: hotQuestion, error },
+    { success: tagSuccess, data: popularTags, error: errorTags },
+  ] = await Promise.all([getTopQuestion(), getTopTag()]);
 
   return (
     <aside className="no-scrollbar bg-background sticky right-0 top-0 flex  w-[350px] flex-col gap-6 h-screen  p-6 pt-25 max-xl:hidden">

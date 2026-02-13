@@ -10,7 +10,7 @@ import type {
 export async function getTopTag(): Promise<ActionResponses<Tags[]>> {
   try {
     await dbConnect;
-    const tags = await Tag.find().sort({ question: -1 }).limit(3);
+    const tags = await Tag.find().sort({ questions: -1 }).limit(3);
 
     return { success: true, data: tags };
   } catch (error) {

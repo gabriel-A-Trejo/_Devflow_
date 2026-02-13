@@ -3,13 +3,23 @@ import { EMPTY_ANSWERS } from "@/shared/constants/states";
 import type { ActionResponses, Answer } from "@/shared/types/global";
 import AnswerCard from "./answer-card";
 import { AnswerFilters } from "@/shared/constants/filters";
-import Filter from "@/features/filters/components/Filter";
+import Filter from "@/shared/components/filters/Filter";
+import Pagination from "@/shared/components/pagination/Pagination";
 
 interface Props extends ActionResponses<Answer[]> {
   totalAnswers: number;
+  page: number;
+  isNext: boolean;
 }
 
-const AllAnswers = ({ data, success, error, totalAnswers }: Props) => {
+const AllAnswers = ({
+  page,
+  isNext,
+  data,
+  success,
+  error,
+  totalAnswers,
+}: Props) => {
   return (
     <div className="mt-11">
       <div className="flex items-center justify-between">
@@ -29,6 +39,7 @@ const AllAnswers = ({ data, success, error, totalAnswers }: Props) => {
           answers.map((answer) => <AnswerCard key={answer._id} {...answer} />)
         }
       />
+      <Pagination page={page} isNext={isNext} />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import Preview from "@/features/editor/Preview";
+import Preview from "@/shared/components/editor/Preview";
 import { getTimeStamp } from "@/features/question/lib/getTimeStamp";
 import { hasVoted } from "@/features/tags/actions/has-voted.action";
 import Votes from "@/features/votes/components/votes";

@@ -20,7 +20,7 @@ import { CreateAnswer } from "../actions/create-answer.action";
 import { useSession } from "next-auth/react";
 import { api } from "@/shared/lib/api";
 
-const Editor = dynamic(() => import("@/features/editor"), {
+const Editor = dynamic(() => import("@/shared/components/editor"), {
   ssr: false,
 });
 

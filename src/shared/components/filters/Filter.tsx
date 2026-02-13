@@ -1,15 +1,15 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/shared/components/ui";
 import {
+  Button,
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/components/ui";
 import { cn } from "@/shared/lib/utils";
 import {
   formUrlQuery,
@@ -77,11 +77,13 @@ const Filter = ({
         </div>
       )}
 
-      {/* Select - always visible in toggle-only mode */}
       <div className={cn(showToggleOnly ? "block mt-4" : "sm:hidden mt-4")}>
         <Select value={activeFilter || undefined} onValueChange={updateFilter}>
           <SelectTrigger className="p-4 w-full">
-            <SelectValue placeholder="Select a Filter" />
+            <SelectValue
+              placeholder="Select a Filter"
+              aria-label="filter-options"
+            />
           </SelectTrigger>
 
           <SelectContent>

@@ -1,4 +1,4 @@
-import Filter from "@/features/filters/components/Filter";
+import Filter from "@/shared/components/filters/Filter";
 import Search from "@/features/search";
 import { getUsers } from "@/features/user/actions/get-users.action";
 import UserCard from "@/features/user/components/user-card";
@@ -8,6 +8,7 @@ import { UserFilters } from "@/shared/constants/filters";
 import ROUTES from "@/shared/constants/routes";
 import { EMPTY_USERS } from "@/shared/constants/states";
 import type { RouteParams } from "@/shared/types/global";
+import Pagination from "@/shared/components/pagination/Pagination";
 
 const Community = async ({ searchParams }: RouteParams) => {
   const { page, pageSize, query, filter } = await searchParams;
@@ -19,10 +20,10 @@ const Community = async ({ searchParams }: RouteParams) => {
     filter,
   });
 
-  const { users } = data || {};
+  const { users, isNext } = data || {};
 
   return (
-    <div>
+    <>
       <Heading>All Users</Heading>
       <div className="mt-11">
         <Search
@@ -45,7 +46,9 @@ const Community = async ({ searchParams }: RouteParams) => {
           </div>
         )}
       />
-    </div>
+
+      <Pagination page={page} isNext={isNext || false} />
+    </>
   );
 };
 

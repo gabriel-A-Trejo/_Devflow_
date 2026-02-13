@@ -1,5 +1,5 @@
-import Filter from "@/features/filters/components/Filter";
-import HomeFilter from "@/features/filters/components/Filter";
+import Filter from "@/shared/components/filters/Filter";
+import HomeFilter from "@/shared/components/filters/Filter";
 import { getQuestions } from "@/features/question/actions/question.action";
 import QuestionCard from "@/features/question/components/question-card";
 import Search from "@/features/search";
@@ -12,6 +12,7 @@ import { EMPTY_QUESTION } from "@/shared/constants/states";
 import { cn } from "@/shared/lib/utils";
 
 import Link from "next/link";
+import Pagination from "@/shared/components/pagination/Pagination";
 
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
@@ -27,7 +28,7 @@ const Home = async ({ searchParams }: SearchParams) => {
     filter: filter || "",
   });
 
-  const { questions } = data || {};
+  const { questions, isNext } = data || {};
 
   return (
     <>
@@ -65,6 +66,7 @@ const Home = async ({ searchParams }: SearchParams) => {
           </div>
         )}
       />
+      <Pagination page={1} isNext={isNext || false} />
     </>
   );
 };

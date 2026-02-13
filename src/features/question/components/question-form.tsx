@@ -24,7 +24,7 @@ import { useRouter } from "next/navigation";
 import ROUTES from "@/shared/constants/routes";
 import { Question } from "@/shared/types/global";
 
-const Editor = dynamic(() => import("@/features/editor"), {
+const Editor = dynamic(() => import("@/shared/components/editor"), {
   ssr: false,
 });
 

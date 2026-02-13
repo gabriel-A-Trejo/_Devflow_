@@ -1,5 +1,5 @@
 import { getSavedQuestion } from "@/features/collections/actions/get-saved-questions.action";
-import Filter from "@/features/filters/components/Filter";
+import Filter from "@/shared/components/filters/Filter";
 import QuestionCard from "@/features/question/components/question-card";
 import Search from "@/features/search";
 import DataRenderer from "@/shared/components/data-renderer";
@@ -7,6 +7,7 @@ import { Heading } from "@/shared/components/header/heading";
 import { CollectionFilters } from "@/shared/constants/filters";
 import ROUTES from "@/shared/constants/routes";
 import { EMPTY_QUESTION } from "@/shared/constants/states";
+import Pagination from "@/shared/components/pagination/Pagination";
 
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
@@ -22,7 +23,7 @@ const Collections = async ({ searchParams }: SearchParams) => {
     filter: filter || "",
   });
 
-  const { collection } = data || {};
+  const { collection, isNext } = data || {};
 
   return (
     <>
@@ -51,6 +52,7 @@ const Collections = async ({ searchParams }: SearchParams) => {
           </div>
         )}
       />
+      <Pagination page={page} isNext={isNext || false} />
     </>
   );
 };

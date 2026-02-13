@@ -3,7 +3,7 @@ import AllAnswers from "@/features/answer/components/all-answers";
 import AnswerForm from "@/features/answer/components/answer-form";
 import { hasSavedQuestion } from "@/features/collections/actions/has-saved-question.action";
 import SaveQuestion from "@/features/collections/components/save-question";
-import Preview from "@/features/editor/Preview";
+import Preview from "@/shared/components/editor/Preview";
 import {
   getQuestionById,
   incrementViews,
@@ -132,6 +132,8 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
 
       <section className="my-5">
         <AllAnswers
+          page={Number(page) || 1}
+          isNext={answerResult?.isNext || false}
           data={answerResult?.answer}
           success={areAnswerLoaded}
           error={answersError}

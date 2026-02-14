@@ -84,6 +84,13 @@ import {
   PaginationPrevious,
 } from "@/shared/components/ui/pagination";
 
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/shared/components/ui/tabs";
+
 export {
   Button,
   DropdownMenu,
@@ -142,4 +149,8 @@ export {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
 };

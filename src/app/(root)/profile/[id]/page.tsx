@@ -11,6 +11,13 @@ import { cn } from "@/shared/lib/utils";
 import { buttonVariants } from "@/shared/components/ui/button";
 
 import { CalendarDays, Link as LinkLucid, MapPin } from "lucide-react";
+import Stats from "@/features/user/components/stats";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/shared/components/ui";
 
 const Profile = async ({ params }: RouteParams) => {
   const { id } = await params;
@@ -29,49 +36,92 @@ const Profile = async ({ params }: RouteParams) => {
     user;
 
   return (
-    <section className="flex flex-col-reverse items-start justify-between sm:flex-row">
-      <div className="flex flex-col items-start gap-4 lg:flex-row">
-        <UserAvatar
-          id={_id}
-          name={name}
-          imageUrl={image}
-          className="size-[140px] rounded-full object-cover "
-          fallbackClassName="text-6xl font-bold"
-        />
-        <div className="mt-3">
-          <h2 className="font-bold text-2xl">{name}</h2>
-          <p className="text-muted-foreground ">@{username}</p>
+    <>
+      <section className="flex flex-col-reverse items-start justify-between sm:flex-row">
+        <div className="flex flex-col items-start gap-4 lg:flex-row">
+          <UserAvatar
+            id={_id}
+            name={name}
+            imageUrl={image}
+            className="size-[140px] rounded-full object-cover "
+            fallbackClassName="text-6xl font-bold"
+          />
+          <div className="mt-3">
+            <h2 className="font-bold text-2xl">{name}</h2>
+            <p className="text-muted-foreground ">@{username}</p>
 
-          <div className="mt-5 flex flex-wrap items-center justify-start gap-5 ">
-            {portfolio && (
+            <div className="mt-5 flex flex-wrap items-center justify-start gap-5 ">
+              {portfolio && (
+                <ProfileLink
+                  icon={LinkLucid}
+                  href={portfolio}
+                  title={"portfolio"}
+                />
+              )}
+              {location && <ProfileLink icon={MapPin} title={"location"} />}
               <ProfileLink
-                icon={LinkLucid}
-                href={portfolio}
-                title={"portfolio"}
+                icon={CalendarDays}
+                title={dayjs(createdAt).format("MMMM YYYY")}
               />
-            )}
-            {location && <ProfileLink icon={MapPin} title={"location"} />}
-            <ProfileLink
-              icon={CalendarDays}
-              title={dayjs(createdAt).format("MMMM YYYY")}
-            />
+            </div>
+
+            {bio && <p className="mt-8">{bio}</p>}
           </div>
-
-          {bio && <p className="mt-8">{bio}</p>}
         </div>
-      </div>
 
-      <div className="flex justify-end max-sm:mb-5 max-sm:w-full sm:mt-3">
-        {loggedInUser?.user?.id === id && (
-          <Link
-            href="/profile/edit"
-            className={cn(buttonVariants({ variant: "default" }), "px-4 py-3")}
+        <div className="flex justify-end max-sm:mb-5 max-sm:w-full sm:mt-3">
+          {loggedInUser?.user?.id === id && (
+            <Link
+              href="/profile/edit"
+              className={cn(
+                buttonVariants({ variant: "default" }),
+                "px-4 py-3",
+              )}
+            >
+              Edit Profile
+            </Link>
+          )}
+        </div>
+      </section>
+      <Stats
+        totalQuestions={totalQuestions}
+        totalAnswers={totalAnswers}
+        badges={{ GOLD: 0, SILVER: 0, BRONZE: 0 }}
+      />
+
+      <section className="mt-10 flex gap-10">
+        <Tabs defaultValue="top-posts" className="flex-[2]">
+          <TabsList className="min-h-[42px] p-1">
+            <TabsTrigger
+              value="top-posts"
+              className="data-[state=active]:text-primary dark:data-[state=active]:text-primary "
+            >
+              Top Posts
+            </TabsTrigger>
+            <TabsTrigger
+              value="answers"
+              className="data-[state=active]:text-primary dark:data-[state=active]:text-primary"
+            >
+              Answers
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent
+            value="top-post"
+            className="mt-5 flex w-full flex-col gap-6"
           >
-            Edit Profile
-          </Link>
-        )}
-      </div>
-    </section>
+            List of Questions
+          </TabsContent>
+          <TabsContent value="answers" className=" flex w-full flex-col gap-6">
+            List of Questions
+          </TabsContent>
+        </Tabs>
+
+        <aside className="flex w-full min-w-[250px] flex-1 flex-col max-lg:hidden">
+          <h3 className="font-bold text-xl ">Top Tech</h3>
+          <div className="mt-7 flex flex-col gap-4"></div>
+        </aside>
+      </section>
+    </>
   );
 };
 

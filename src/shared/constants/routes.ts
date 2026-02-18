@@ -9,6 +9,7 @@ const ROUTES = {
   PROFILES: "/profile",
   ASK_QUESTION: "/ask-question",
   QUESTION: (id: string) => `/questions/${id}`,
+  EDITQUESTION: (id: string) => `/questions/${id}/edit`,
   TAG: (id: string) => `/tags/${id}`,
   PROFILE: (id: string) => `/profile/${id}`,
 } as const;

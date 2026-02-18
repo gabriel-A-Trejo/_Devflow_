@@ -8,7 +8,14 @@ import ROUTES from "@/shared/constants/routes";
 import type { Answer } from "@/shared/types/global";
 import Link from "next/link";
 import { Suspense } from "react";
+import EditDeleteAction from "@/features/user/components/edit-delete-action";
+import { cn } from "@/shared/lib/utils";
 
+interface Props extends Answer {
+  containerClasses?: string;
+  showReadMore?: boolean;
+  showActionBtns: boolean;
+}
 const AnswerCard = ({
   _id,
   author,
@@ -16,7 +23,11 @@ const AnswerCard = ({
   createdAt,
   upvotes,
   downvotes,
-}: Answer) => {
+  question,
+  containerClasses,
+  showReadMore,
+  showActionBtns = false,
+}: Props) => {
   const hasVotedPromise = hasVoted({ targetId: _id, targetType: "answer" });
   return (
     <CompactCard
@@ -26,8 +37,13 @@ const AnswerCard = ({
       titleClassName="sr-only  "
       headerClassName="hidden"
       content={
-        <article className="">
-          <span id={JSON.stringify(_id)} />
+        <article className={cn(containerClasses, "relative")}>
+          <span id={`answer-${_id}`} />
+          {showActionBtns && (
+            <div className="flex-center absolute -right-2 -top-5 size-9 rounded-full">
+              <EditDeleteAction type="Answer" itemId={_id} />
+            </div>
+          )}
 
           <div className="flex items-start justify-between gap-4 mb-8 ">
             <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
@@ -64,6 +80,15 @@ const AnswerCard = ({
           </div>
 
           <Preview content={content} />
+
+          {showReadMore && (
+            <Link
+              href={ROUTES.QUESTION(`${question}#answer-${_id}`)}
+              className="relative z-10 text-primary pointer-text"
+            >
+              Read more
+            </Link>
+          )}
         </article>
       }
     />

@@ -36,6 +36,7 @@ function UserAvatar({
             fill
             className="object-cover"
             quality={100}
+            priority
           />
         ) : (
           <AvatarFallback className={cn(fallbackClassName)}>

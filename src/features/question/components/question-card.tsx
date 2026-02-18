@@ -7,13 +7,16 @@ import { Metric } from "./metric";
 import { Eye, MessageCircle, ThumbsUp } from "lucide-react";
 import { formatNumber } from "../lib/formatNumber";
 import type { Question, Tags } from "@/shared/types/global";
+import EditDeleteAction from "@/features/user/components/edit-delete-action";
 
 interface Props {
   question: Question;
+  showActionBtns: boolean;
 }
 
 const QuestionCard = ({
   question: { _id, title, tags, author, createdAt, upvotes, answers, views },
+  showActionBtns = false,
 }: Props) => {
   return (
     <CompactCard
@@ -22,15 +25,24 @@ const QuestionCard = ({
       headerClassName="hidden"
       content={
         <section className="flex flex-col p-1.5">
-          <span className="sm:hidden text-xs text-muted-foreground">
-            {getTimeStamp(createdAt)}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="sm:hidden text-xs text-muted-foreground">
+              {getTimeStamp(createdAt)}
+            </span>
+
+            {showActionBtns && (
+              <div className="ml-auto">
+                <EditDeleteAction type="Question" itemId={_id} />
+              </div>
+            )}
+          </div>
           <Link
             href={ROUTES.QUESTION(_id)}
             className="hover:text-muted-foreground text-lg font-bold line-clamp-1 cursor-pointer mt-1.5"
           >
             {title}
           </Link>
+
           <div className="flex gap-2 mt-5 flex-wrap">
             {tags.map((tag: Tags) => (
               <TagCard

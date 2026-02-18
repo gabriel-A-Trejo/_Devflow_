@@ -20,35 +20,42 @@ import {
 } from "@/shared/components/ui";
 import { getUserQuestion } from "@/features/question/actions/get-user-questions.action";
 import DataRenderer from "@/shared/components/data-renderer";
-import { EMPTY_QUESTION } from "@/shared/constants/states";
+import { EMPTY_ANSWERS, EMPTY_QUESTION } from "@/shared/constants/states";
 import QuestionCard from "@/features/question/components/question-card";
 import Pagination from "@/shared/components/pagination/Pagination";
+import { getUserAnswers } from "@/features/answer/actions/get-user-answer.action";
+import AnswerCard from "@/features/answer/components/answer-card";
+import { getUserTags } from "@/features/tags/actions/get-user-tags.action";
+import TagCard from "@/features/tags/components/tag-card";
 
 const Profile = async ({ params, searchParams }: RouteParams) => {
-  const { id } = await params;
-  const { page, pageSize } = await searchParams;
+  const [{ id }, { page: rawPage, pageSize: rawPageSize }] = await Promise.all([
+    params,
+    searchParams,
+  ]);
+  const page = Number(rawPage) || 1;
+  const pageSize = Number(rawPageSize) || 10;
+
   if (!id) notFound();
 
-  const loggedInUser = await auth();
-  const { success, data, error } = await getUser({
-    userId: id,
-  });
+  const [
+    loggedInUser,
+    userRes,
+    userQuestionsRes,
+    userAnswersRes,
+    userTopTagsRes,
+  ] = await Promise.all([
+    auth(),
+    getUser({ userId: id }),
+    getUserQuestion({ userId: id, page, pageSize }),
+    getUserAnswers({ userId: id, page, pageSize }),
+    getUserTags({ userId: id }),
+  ]);
 
-  if (!success) return <p className="text-">{error?.message}</p>;
-
-  const { user, totalQuestions, totalAnswers } = data!;
-
-  const {
-    success: userQuestionsSuccess,
-    data: userQuestions,
-    error: userQuestionsError,
-  } = await getUserQuestion({
-    userId: id,
-    page: Number(page) || 1,
-    pageSize: Number(pageSize) || 10,
-  });
-
-  const { questions, isNext: hasMoreQuestions } = userQuestions!;
+  const { user, totalQuestions, totalAnswers } = userRes.data!;
+  const { questions, isNext: hasMoreQuestions } = userQuestionsRes.data!;
+  const { answers, isNext: hasMoreAnswers } = userAnswersRes.data!;
+  const { tags } = userTopTagsRes.data!;
 
   const { _id, name, image, username, portfolio, location, createdAt, bio } =
     user;
@@ -61,22 +68,22 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
             id={_id}
             name={name}
             imageUrl={image}
-            className="size-[140px] rounded-full object-cover "
+            className="size-[140px] rounded-full object-cover"
             fallbackClassName="text-6xl font-bold"
           />
           <div className="mt-3">
             <h2 className="font-bold text-2xl">{name}</h2>
-            <p className="text-muted-foreground ">@{username}</p>
+            <p className="text-muted-foreground">@{username}</p>
 
-            <div className="mt-5 flex flex-wrap items-center justify-start gap-5 ">
+            <div className="mt-5 flex flex-wrap items-center justify-start gap-5">
               {portfolio && (
                 <ProfileLink
                   icon={LinkLucid}
                   href={portfolio}
-                  title={"portfolio"}
+                  title="portfolio"
                 />
               )}
-              {location && <ProfileLink icon={MapPin} title={"location"} />}
+              {location && <ProfileLink icon={MapPin} title="location" />}
               <ProfileLink
                 icon={CalendarDays}
                 title={dayjs(createdAt).format("MMMM YYYY")}
@@ -101,6 +108,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
           )}
         </div>
       </section>
+
       <Stats
         totalQuestions={totalQuestions}
         totalAnswers={totalAnswers}
@@ -112,7 +120,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
           <TabsList className="min-h-[42px] p-1">
             <TabsTrigger
               value="top-posts"
-              className="data-[state=active]:text-primary dark:data-[state=active]:text-primary "
+              className="data-[state=active]:text-primary dark:data-[state=active]:text-primary"
             >
               Top Posts
             </TabsTrigger>
@@ -123,6 +131,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
               Answers
             </TabsTrigger>
           </TabsList>
+
           <TabsContent
             value="top-posts"
             className="mt-5 flex w-full flex-col gap-6"
@@ -130,26 +139,76 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
             <DataRenderer
               data={questions}
               empty={EMPTY_QUESTION}
-              success={userQuestionsSuccess}
-              error={userQuestionsError}
+              success={userQuestionsRes.success}
+              error={userQuestionsRes.error}
               render={(questions) => (
                 <div className="flex w-full flex-col gap-6">
                   {questions.map((question) => (
-                    <QuestionCard key={question._id} question={question} />
+                    <QuestionCard
+                      key={question._id}
+                      question={question}
+                      showActionBtns={
+                        loggedInUser?.user?.id === question.author._id
+                      }
+                    />
                   ))}
                 </div>
               )}
             />
             <Pagination page={page} isNext={hasMoreQuestions} />
           </TabsContent>
-          <TabsContent value="answers" className=" flex w-full flex-col gap-6">
-            List of Questions
+
+          <TabsContent value="answers" className="flex w-full flex-col gap-6">
+            <DataRenderer
+              data={answers}
+              empty={EMPTY_ANSWERS}
+              success={userAnswersRes.success}
+              error={userAnswersRes.error}
+              render={(answers) => (
+                <div className="flex w-full flex-col gap-10">
+                  {answers.map((answer) => (
+                    <AnswerCard
+                      key={answer._id}
+                      {...answer}
+                      content={answer.content.slice(0, 27)}
+                      containerClasses="card-wrapper rounded-[10px] px-7 py-9 sm:px-11"
+                      showReadMore
+                      showActionBtns={
+                        loggedInUser?.user?.id === answer.author._id
+                      }
+                    />
+                  ))}
+                </div>
+              )}
+            />
+            <Pagination page={page} isNext={hasMoreAnswers} />
           </TabsContent>
         </Tabs>
 
         <aside className="flex w-full min-w-[250px] flex-1 flex-col max-lg:hidden">
-          <h3 className="font-bold text-xl ">Top Tech</h3>
-          <div className="mt-7 flex flex-col gap-4"></div>
+          <h3 className="font-bold text-xl">Top Tech</h3>
+          <div className="mt-7 flex flex-col gap-4">
+            <DataRenderer
+              data={tags}
+              empty={EMPTY_ANSWERS}
+              success={userTopTagsRes.success}
+              error={userTopTagsRes.error}
+              render={(tags) => (
+                <div className="mt-3 flex flex-col w-full gap-4">
+                  {tags.map((tag) => (
+                    <TagCard
+                      key={tag._id}
+                      _id={tag._id}
+                      name={tag.name}
+                      questions={tag.count}
+                      showCount
+                      compact
+                    />
+                  ))}
+                </div>
+              )}
+            />
+          </div>
         </aside>
       </section>
     </>

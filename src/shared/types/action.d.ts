@@ -1,20 +1,32 @@
 import { PaginatedSearchParams } from "./global";
 
-interface SignWithOAuthParams {
-  provider: "github" | "google";
-  providerAccountId: string;
-  user: {
-    name: string;
-    username: string;
-    email: string;
-    image: string;
-  };
-}
-
-interface AuthCredentials {
+interface UserBase {
   name: string;
   username: string;
   email: string;
+  image?: string;
+}
+
+interface WithQuestionId {
+  questionId: string;
+}
+
+interface WithUserId {
+  userId: string;
+}
+
+interface BaseVoteParams {
+  targetId: string;
+  targetType: "question" | "answer";
+}
+
+interface SignWithOAuthParams {
+  provider: "github" | "google";
+  providerAccountId: string;
+  user: UserBase;
+}
+
+interface AuthCredentials extends Omit<UserBase, "image"> {
   password: string;
 }
 
@@ -28,53 +40,43 @@ interface EditQuestionParams extends CreateQuestionParams {
   questionId: string;
 }
 
-interface GetQuestionParams {
-  questionId: string;
-}
+interface GetQuestionParams extends WithQuestionId {}
 
 interface GetTagQuestionParams extends Omit<PaginatedSearchParams, "filter"> {
   tagId: string;
 }
 
-interface IncrementViewsParams {
-  questionId: string;
-}
+interface IncrementViewsParams extends WithQuestionId {}
 
-interface CreateAnswerParams {
-  questionId: string;
+interface CreateAnswerParams extends WithQuestionId {
   content: string;
 }
 
-interface GetAnswerParams extends PaginatedSearchParams {
-  questionId: string;
-}
+interface GetAnswerParams extends PaginatedSearchParams, WithQuestionId {}
 
-interface CreateVotesParams {
-  targetId: string;
-  targetType: "question" | "answer";
+interface CreateVotesParams extends BaseVoteParams {
   voteType: "upvote" | "downvote";
 }
 
-interface UpdateVoteCountParams extends CreateVotesParams {
+interface UpdateVoteCountParams extends BaseVoteParams {
   change: 1 | -1;
 }
 
-type HasVotedParams = Pick<CreateVotesParams, "targetId" | "targetType">;
+type HasVotedParams = BaseVoteParams;
 
 interface HasVotedResponse {
   hasUpVoted: boolean;
   hasDownVoted: boolean;
 }
 
-interface CollectionBasedParams {
-  questionId: string;
-}
+interface CollectionBasedParams extends WithQuestionId {}
 
-interface GetUserParams {
-  userId: string;
-}
+interface GetUserParams extends WithUserId {}
 
 interface GetUserQuestionsParams
-  extends Omit<PaginatedSearchParams, "query" | "filter" | "sort"> {
-  userId: string;
-}
+  extends Omit<PaginatedSearchParams, "query" | "filter" | "sort">,
+    WithUserId {}
+
+interface GetUserAnswerParams extends PaginatedSearchParams, WithUserId {}
+
+interface GetUserTagParams extends WithUserId {}

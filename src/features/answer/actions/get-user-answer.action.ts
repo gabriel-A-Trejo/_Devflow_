@@ -1,21 +1,22 @@
 "use server";
+
 import action from "@/shared/lib/handlers/action";
-import type { GetUserQuestionsParams } from "@/shared/types/action";
+import type { GetUserAnswerParams } from "@/shared/types/action";
 import type {
   ActionResponses,
+  Answer as AnswerType,
   ErrorResponse,
-  Question as QuestionType,
 } from "@/shared/types/global";
-import { GetUserQuestionSchema } from "../schema/get-user-questions-schema";
 import handleError from "@/shared/lib/handlers/errors";
-import { Question } from "@/database";
+import { Answer } from "@/database";
+import { GetUserAnswerSchema } from "../schema/get-user-answer-schema";
 
-export async function getUserQuestion(
-  params: GetUserQuestionsParams,
-): Promise<ActionResponses<{ questions: QuestionType[]; isNext: boolean }>> {
+export async function getUserAnswers(
+  params: GetUserAnswerParams,
+): Promise<ActionResponses<{ answers: AnswerType[]; isNext: boolean }>> {
   const validationResult = await action({
     params,
-    schema: GetUserQuestionSchema,
+    schema: GetUserAnswerSchema,
   });
 
   if (validationResult instanceof Error) {
@@ -27,21 +28,20 @@ export async function getUserQuestion(
   const limit = pageSize;
 
   try {
-    const [totalQuestion, questions] = await Promise.all([
-      Question.countDocuments({ author: userId }),
-      Question.find({ author: userId })
-        .populate("tags", "name")
+    const [totalAnswers, answers] = await Promise.all([
+      Answer.countDocuments({ author: userId }),
+      Answer.find({ author: userId })
         .populate("author", "name image")
         .skip(skip)
         .limit(limit),
     ]);
 
-    const isNext = totalQuestion > skip + questions.length;
+    const isNext = totalAnswers > skip + answers.length;
 
     return {
       success: true,
       data: {
-        questions: JSON.parse(JSON.stringify(questions)), // ✅ kept original
+        answers: JSON.parse(JSON.stringify(answers)),
         isNext,
       },
     };

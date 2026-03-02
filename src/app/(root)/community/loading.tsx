@@ -1,0 +1,35 @@
+import { Heading } from "@/shared/components/header/heading";
+import { Skeleton } from "@/shared/components/ui";
+
+const Loading = () => {
+  return (
+    <>
+      <section className="w-full flex flex-col-reverse sm:flex-row justify-between gap-4 sm:items-center">
+        <Heading> All Users </Heading>
+      </section>
+
+      <div className="mt-10 flex justify-between gap-5 max-sm:flex-col sm:items-center">
+        <Skeleton className="h-14 w-full" />
+        <Skeleton className="h-14 sm:w-28 hidden max-md:flex" />
+      </div>
+
+      <div className="mt-10 flex flex-wrap gap-3 max-md:hidden">
+        <Skeleton className="px-[49.5px] py-[18px] rounded-lg " />
+        <Skeleton className="px-[49.5px] py-[18px] rounded-lg " />
+        <Skeleton className="px-[49.5px] py-[18px] rounded-lg " />
+        <Skeleton className="px-[49.5px] py-[18px] rounded-lg " />
+      </div>
+
+      <div className="mt-12 flex flex-wrap gap-5">
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
+          <Skeleton
+            key={item}
+            className="h-54 w-full rounded-2xl sm:w-[223px]"
+          />
+        ))}
+      </div>
+    </>
+  );
+};
+
+export default Loading;

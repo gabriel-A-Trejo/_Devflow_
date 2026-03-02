@@ -26,16 +26,22 @@ interface Props {
   totalAnswers: number;
   totalQuestions: number;
   badges: BadgeCounts;
+  reputationPoints: number;
 }
 
-const Stats = ({ totalAnswers, totalQuestions, badges }: Props) => {
+const Stats = ({
+  totalAnswers,
+  totalQuestions,
+  badges,
+  reputationPoints,
+}: Props) => {
   return (
     <div className="mt-10">
       <h4 className="font-bold text-xl">
         Stats{" "}
-        {/* <span className="small-semibold primary-text-gradient">
+        <span className="small-semibold text-primary">
           {formatNumber(reputationPoints)}
-        </span> */}
+        </span>
       </h4>
 
       <div className="xs:grid-cols-2 mt-5 grid grid-cols-1 gap-5 md:grid-cols-4">

@@ -26,6 +26,10 @@ import type {
   IncrementViewsParams,
 } from "@/shared/types/action";
 import { IncrementViewsSchema } from "../schema/increment-views-schema";
+import { after } from "next/server";
+import { createInteraction } from "@/features/interaction/action/create-interaction.action";
+import { getRecommendationQuestions } from "./get-recommended-question.action";
+import { auth } from "@/auth";
 
 export async function createQuestion(
   params: CreateQuestionParams,
@@ -44,9 +48,9 @@ export async function createQuestion(
   const userId = validationResult.session?.user?.id;
 
   const session = await mongoose.startSession();
-  session.startTransaction();
 
   try {
+    session.startTransaction();
     const [question] = await Question.create(
       [{ title, content, author: userId }],
       { session },
@@ -78,6 +82,15 @@ export async function createQuestion(
       { $push: { tags: { $each: tagIds } } },
       { session },
     );
+
+    after(async () => {
+      await createInteraction({
+        action: "post",
+        actionId: question._id.toString(),
+        actionTarget: "question",
+        authorId: userId as string,
+      });
+    });
 
     await session.commitTransaction();
 
@@ -125,7 +138,6 @@ export async function EditQuestion(
       await question.save({ session });
     }
 
-    // Determine tags to add and remove
     const tagsToAdd = tags.filter(
       (tag) =>
         !question.tags.some(
@@ -138,7 +150,6 @@ export async function EditQuestion(
         !tags.some((t) => t.toLowerCase() === tag.name.toLowerCase()),
     );
 
-    // Add new tags
     const newTagDocuments = [];
     if (tagsToAdd.length > 0) {
       for (const tag of tagsToAdd) {
@@ -221,7 +232,7 @@ export const getQuestionById = cache(async function getQuestion(
   }
 });
 
-export async function getQuestions(
+export const getQuestions = cache(async function getQuestions(
   params: PaginatedSearchParams,
 ): Promise<ActionResponses<{ questions: QuestionType[]; isNext: boolean }>> {
   const validationResult = await action({
@@ -239,8 +250,23 @@ export async function getQuestions(
 
   const filterQuery: QueryFilter<typeof Question> = {};
 
-  if (filter === "recommended")
-    return { success: true, data: { questions: [], isNext: false } };
+  if (filter === "recommended") {
+    const session = await auth();
+    const userId = session?.user?.id;
+
+    if (!userId) {
+      return { success: true, data: { questions: [], isNext: false } };
+    }
+
+    const recommended = await getRecommendationQuestions({
+      userId,
+      query,
+      skip,
+      limit,
+    });
+
+    return { success: true, data: recommended };
+  }
 
   if (query) {
     filterQuery.$or = [
@@ -286,7 +312,7 @@ export async function getQuestions(
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
-}
+});
 
 export async function incrementViews(
   params: IncrementViewsParams,

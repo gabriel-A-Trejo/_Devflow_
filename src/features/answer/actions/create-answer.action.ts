@@ -10,6 +10,8 @@ import mongoose from "mongoose";
 import { Answer, Question } from "@/database";
 import { revalidatePath } from "next/cache";
 import ROUTES from "@/shared/constants/routes";
+import { after } from "next/server";
+import { createInteraction } from "@/features/interaction/action/create-interaction.action";
 
 export async function CreateAnswer(
   params: CreateAnswerParams,
@@ -44,6 +46,14 @@ export async function CreateAnswer(
 
     question.answers += 1;
     await question.save({ session });
+    after(async () => {
+      await createInteraction({
+        action: "post",
+        actionId: newAnswer._id.toString(),
+        actionTarget: "answer",
+        authorId: userId as string,
+      });
+    });
     await session.commitTransaction();
 
     revalidatePath(ROUTES.QUESTION(questionId));

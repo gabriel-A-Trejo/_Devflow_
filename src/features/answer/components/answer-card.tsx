@@ -14,7 +14,7 @@ import { cn } from "@/shared/lib/utils";
 interface Props extends Answer {
   containerClasses?: string;
   showReadMore?: boolean;
-  showActionBtns: boolean;
+  showActionBtns?: boolean;
 }
 const AnswerCard = ({
   _id,
@@ -75,6 +75,7 @@ const AnswerCard = ({
                 hasVotedPromise={hasVotedPromise}
                 upvotes={upvotes}
                 downvotes={downvotes}
+                authorId={author._id}
               />
             </Suspense>
           </div>

@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { getUser } from "@/features/user/actions/get-user-details";
+import { getUserStats } from "@/features/user/actions/get-user-stats.action";
 import ProfileLink from "@/features/user/components/profile-link";
 import UserAvatar from "@/shared/components/navigation/navbar/userAvatar";
 import type { RouteParams } from "@/shared/types/global";
@@ -27,6 +28,7 @@ import { getUserAnswers } from "@/features/answer/actions/get-user-answer.action
 import AnswerCard from "@/features/answer/components/answer-card";
 import { getUserTags } from "@/features/tags/actions/get-user-tags.action";
 import TagCard from "@/features/tags/components/tag-card";
+import ROUTES from "@/shared/constants/routes";
 
 const Profile = async ({ params, searchParams }: RouteParams) => {
   const [{ id }, { page: rawPage, pageSize: rawPageSize }] = await Promise.all([
@@ -44,18 +46,21 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
     userQuestionsRes,
     userAnswersRes,
     userTopTagsRes,
+    userStatsRes,
   ] = await Promise.all([
     auth(),
     getUser({ userId: id }),
     getUserQuestion({ userId: id, page, pageSize }),
     getUserAnswers({ userId: id, page, pageSize }),
     getUserTags({ userId: id }),
+    getUserStats({ userId: id }),
   ]);
 
-  const { user, totalQuestions, totalAnswers } = userRes.data!;
+  const { user } = userRes.data!;
   const { questions, isNext: hasMoreQuestions } = userQuestionsRes.data!;
   const { answers, isNext: hasMoreAnswers } = userAnswersRes.data!;
   const { tags } = userTopTagsRes.data!;
+  const { data: userStats } = userStatsRes;
 
   const { _id, name, image, username, portfolio, location, createdAt, bio } =
     user;
@@ -83,7 +88,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
                   title="portfolio"
                 />
               )}
-              {location && <ProfileLink icon={MapPin} title="location" />}
+              {location && <ProfileLink icon={MapPin} title={location} />}
               <ProfileLink
                 icon={CalendarDays}
                 title={dayjs(createdAt).format("MMMM YYYY")}
@@ -97,7 +102,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
         <div className="flex justify-end max-sm:mb-5 max-sm:w-full sm:mt-3">
           {loggedInUser?.user?.id === id && (
             <Link
-              href="/profile/edit"
+              href={ROUTES.EDITPROFILE}
               className={cn(
                 buttonVariants({ variant: "default" }),
                 "px-4 py-3",
@@ -110,9 +115,10 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
       </section>
 
       <Stats
-        totalQuestions={totalQuestions}
-        totalAnswers={totalAnswers}
-        badges={{ GOLD: 0, SILVER: 0, BRONZE: 0 }}
+        totalQuestions={userStats?.totalQuestions ?? 0}
+        totalAnswers={userStats?.totalAnswer ?? 0}
+        badges={userStats?.badges ?? { GOLD: 0, SILVER: 0, BRONZE: 0 }}
+        reputationPoints={user.reputation ?? 0}
       />
 
       <section className="mt-10 flex gap-10">
@@ -158,20 +164,20 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
             <Pagination page={page} isNext={hasMoreQuestions} />
           </TabsContent>
 
-          <TabsContent value="answers" className="flex w-full flex-col gap-6">
+          <TabsContent value="answers" className="flex w-full flex-col gap-2">
             <DataRenderer
               data={answers}
               empty={EMPTY_ANSWERS}
               success={userAnswersRes.success}
               error={userAnswersRes.error}
               render={(answers) => (
-                <div className="flex w-full flex-col gap-10">
+                <div className="flex w-full flex-col ">
                   {answers.map((answer) => (
                     <AnswerCard
                       key={answer._id}
                       {...answer}
                       content={answer.content.slice(0, 27)}
-                      containerClasses="card-wrapper rounded-[10px] px-7 py-9 sm:px-11"
+                      containerClasses="card-wrapper rounded-[10px] px-7 py-6 sm:px-11"
                       showReadMore
                       showActionBtns={
                         loggedInUser?.user?.id === answer.author._id

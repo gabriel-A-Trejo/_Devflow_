@@ -1,6 +1,5 @@
 import Filter from "@/shared/components/filters/Filter";
-import HomeFilter from "@/shared/components/filters/Filter";
-import { getQuestions } from "@/features/question/actions/question.action";
+
 import QuestionCard from "@/features/question/components/question-card";
 import Search from "@/features/search";
 import DataRenderer from "@/shared/components/data-renderer";
@@ -13,6 +12,7 @@ import { cn } from "@/shared/lib/utils";
 
 import Link from "next/link";
 import Pagination from "@/shared/components/pagination/Pagination";
+import { getQuestions } from "@/features/question/actions/question.action";
 
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;

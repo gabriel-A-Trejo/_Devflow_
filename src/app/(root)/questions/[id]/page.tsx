@@ -27,25 +27,25 @@ import { after } from "next/server";
 import { Suspense } from "react";
 
 const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
-  const { id } = await params;
-  const { page, pageSize, filter } = await searchParams;
-
-  const { success, data: question } = await getQuestionById({ questionId: id });
-
+  const [{ id }, { page, pageSize, filter }] = await Promise.all([
+    params,
+    searchParams,
+  ]);
+  const [
+    { success, data: question },
+    { success: areAnswerLoaded, data: answerResult, error: answersError },
+  ] = await Promise.all([
+    getQuestionById({ questionId: id }),
+    getAnswers({
+      questionId: id,
+      page: Number(page) || 1,
+      pageSize: Number(pageSize) || 10,
+      filter,
+    }),
+  ]);
   after(async () => [await incrementViews({ questionId: id })]);
 
   if (!success || !question) return redirect("/404");
-
-  const {
-    success: areAnswerLoaded,
-    data: answerResult,
-    error: answersError,
-  } = await getAnswers({
-    questionId: id,
-    page: Number(page) || 1,
-    pageSize: Number(pageSize) || 10,
-    filter: filter,
-  });
 
   const hasVotedPromise = hasVoted({
     targetId: question._id,
@@ -70,7 +70,7 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
               className="size-[22px]"
               fallbackClassName="text-[10px]"
             />
-            <Link href={ROUTES.PROFILE(id)}>
+            <Link href={ROUTES.PROFILE(author._id)}>
               <p className="font-semibold">{author.name}</p>
             </Link>
           </div>
@@ -80,6 +80,7 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
                 upvotes={question.upvotes}
                 downvotes={question.downvotes}
                 targetType="question"
+                authorId={author._id}
                 targetId={question._id}
                 hasVotedPromise={hasVotedPromise}
               />

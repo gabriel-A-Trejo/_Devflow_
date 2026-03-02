@@ -28,7 +28,7 @@ const Collections = async ({ searchParams }: SearchParams) => {
   return (
     <>
       <section className="flex w-full flex-col-reverse sm:flex-row justify-between gap-4 sm:items-center">
-        <Heading> Saved Question </Heading>
+        <Heading> Saved Questions </Heading>
       </section>
       <section className="mt-11">
         <Search

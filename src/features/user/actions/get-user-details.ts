@@ -14,8 +14,6 @@ import { Answer, Question, User } from "@/database";
 export async function getUser(params: GetUserParams): Promise<
   ActionResponses<{
     user: UserType;
-    totalQuestions: number;
-    totalAnswers: number;
   }>
 > {
   const validationResult = await action({
@@ -29,11 +27,7 @@ export async function getUser(params: GetUserParams): Promise<
   const { userId } = params;
 
   try {
-    const [user, totalQuestions, totalAnswers] = await Promise.all([
-      User.findById(userId),
-      Question.countDocuments({ author: userId }),
-      Answer.countDocuments({ author: userId }),
-    ]);
+    const [user] = await Promise.all([User.findById(userId)]);
 
     if (!user) throw new Error("User not Found");
 
@@ -41,8 +35,6 @@ export async function getUser(params: GetUserParams): Promise<
       success: true,
       data: {
         user: JSON.parse(JSON.stringify(user)),
-        totalQuestions,
-        totalAnswers,
       },
     };
   } catch (error) {

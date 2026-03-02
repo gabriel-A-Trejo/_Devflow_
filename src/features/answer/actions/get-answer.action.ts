@@ -47,11 +47,14 @@ export async function getAnswers(params: GetAnswerParams): Promise<
   }
 
   try {
-    const totalAnswers = await Answer.countDocuments({ question: questionId });
-    const answers = await Answer.find({ question: questionId })
-      .populate("author", "_id name image")
-      .sort(sortCriteria)
-      .limit(limit);
+    const [totalAnswers, answers] = await Promise.all([
+      Answer.countDocuments({ question: questionId }),
+      Answer.find({ question: questionId })
+        .populate("author", "_id name image")
+        .sort(sortCriteria)
+        .skip(skip)
+        .limit(limit),
+    ]);
 
     const isNext = totalAnswers > skip + answers.length;
     return {

@@ -11,7 +11,7 @@ import EditDeleteAction from "@/features/user/components/edit-delete-action";
 
 interface Props {
   question: Question;
-  showActionBtns: boolean;
+  showActionBtns?: boolean;
 }
 
 const QuestionCard = ({

@@ -40,9 +40,7 @@ export default async function RootLayout({
         />
       </head>
       <SessionProvider session={session}>
-        <body
-          
-        >
+        <body>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

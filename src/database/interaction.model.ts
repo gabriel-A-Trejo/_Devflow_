@@ -1,5 +1,16 @@
 import { Schema, models, model, type Types, type Document } from "mongoose";
 
+export const InteractionActionEnums = [
+  "view",
+  "upvote",
+  "downvote",
+  "bookmark",
+  "post",
+  "edit",
+  "delete",
+  "search",
+] as const;
+
 export interface IInteraction {
   user: Types.ObjectId;
   action: string;
@@ -11,7 +22,7 @@ export interface IInteractionDoc extends IInteraction, Document {}
 const InteractionSchema = new Schema<IInteraction>(
   {
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    action: { type: String, required: true }, // 'upvote', 'downvote', 'view', 'ask_question',
+    action: { type: String, enum: InteractionActionEnums, required: true }, // 'upvote', 'downvote', 'view', 'ask_question',
     actionId: { type: Schema.Types.ObjectId, required: true }, // 'questionId', 'answerId',
     actionType: { type: String, enum: ["question", "answer"], required: true },
   },

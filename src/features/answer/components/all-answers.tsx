@@ -23,11 +23,9 @@ const AllAnswers = ({
   return (
     <div className="mt-11">
       <div className="flex items-center justify-between">
-        {totalAnswers > 0 && (
-          <h3 className="text-primary">
-            {totalAnswers} {totalAnswers === 1 ? "Answer" : "Answers"}
-          </h3>
-        )}
+        <h3 className="text-primary">
+          {totalAnswers} {totalAnswers <= 1 ? "Answer" : "Answers"}
+        </h3>
         <Filter filters={AnswerFilters} showToggleOnly />
       </div>
       <DataRenderer

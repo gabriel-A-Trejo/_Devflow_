@@ -38,3 +38,11 @@ export const GlobalSearchFilters = [
   { name: "User", value: "user" },
   { name: "Tag", value: "tag" },
 ];
+
+export const TagQuestionFilters = [
+  { name: "Newest", value: "recent" },
+  { name: "Oldest", value: "oldest" },
+  { name: "Most Voted", value: "popular" },
+  { name: "Most Viewed", value: "most-viewed" },
+  { name: "Most Answered", value: "most-answered" },
+];

@@ -103,6 +103,8 @@ import {
   AlertDialogTrigger,
 } from "@/shared/components/ui/alert-dialog";
 
+import { Skeleton } from "@/shared/components/ui/skeleton";
+
 export {
   Button,
   DropdownMenu,
@@ -174,4 +176,5 @@ export {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
+  Skeleton,
 };

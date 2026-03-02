@@ -10,6 +10,7 @@ import bcrypt from "bcryptjs";
 import Account from "@/database/account.model";
 import { signIn } from "@/auth";
 import { NotFoundError } from "@/shared/lib/http-errors";
+import type { AuthCredentials } from "@/shared/types/action";
 
 export async function signUpWithCredentials(
   params: AuthCredentials,

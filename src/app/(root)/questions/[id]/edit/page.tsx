@@ -5,6 +5,7 @@ import type { RouteParams } from "@/shared/types/global";
 import ROUTES from "@/shared/constants/routes";
 import QuestionForm from "@/features/question/components/question-form";
 import { getQuestionById } from "@/features/question/actions/question.action";
+import { Heading } from "@/shared/components/header/heading";
 
 const Page = async ({ params }: RouteParams) => {
   const { id } = await params;
@@ -22,7 +23,10 @@ const Page = async ({ params }: RouteParams) => {
 
   return (
     <main>
-      <QuestionForm question={question} isEdit />
+      <Heading>Edit Question</Heading>
+      <section className="mt-10">
+        <QuestionForm question={question} isEdit />
+      </section>
     </main>
   );
 };

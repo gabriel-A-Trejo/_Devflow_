@@ -6,8 +6,9 @@ import type { ActionResponses, ErrorResponse } from "@/shared/types/global";
 import { CollectionBaseSchema } from "../schema/collection-base-schema";
 import handleError from "@/shared/lib/handlers/errors";
 import { Collection } from "@/database";
+import { cache } from "react";
 
-export async function hasSavedQuestion(
+export const hasSavedQuestion = cache(async function hasSavedQuestion(
   params: CollectionBasedParams,
 ): Promise<ActionResponses<{ isSaved: boolean }>> {
   const validationResult = await action({
@@ -33,4 +34,4 @@ export async function hasSavedQuestion(
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
-}
+});

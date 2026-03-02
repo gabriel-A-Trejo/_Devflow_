@@ -11,7 +11,7 @@ const UserCard = ({ _id, name, image, username }: User) => {
       titleClassName="sr-only"
       headerClassName="hidden"
       content={
-        <article className="flex h-full flex-col items-center justify-center p-8 text-center">
+        <article className="flex h-full flex-col items-center justify-center p-1 lg:p-4 text-center">
           <UserAvatar
             id={_id}
             name={name}

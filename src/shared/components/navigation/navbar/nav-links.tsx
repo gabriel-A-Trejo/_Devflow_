@@ -35,13 +35,14 @@ const NavLinks = ({ isMobileNav = false, userId }: NavLinksProps) => {
           <Link
             key={route}
             href={route}
+            aria-label={item.label}
             className={clsx(
               "flex items-center justify-start gap-4 rounded-xl p-4 text-muted-foreground transition-colors",
               isActive && "bg-primary text-white font-bold",
               !isActive && "hover:bg-muted",
             )}
           >
-            <Icon />
+            <Icon aria-hidden="true" />
             <span className={clsx(!isMobileNav && "max-lg:hidden")}>
               {item.label}
             </span>

@@ -2,9 +2,16 @@ import { getCountries } from "@/features/jobs/actions/get-countries";
 import { getUserLocation } from "@/features/jobs/actions/get-user-location";
 import JobFilter from "@/features/jobs/components/job-filter";
 import JobList from "@/features/jobs/components/job-list";
+import Placeholder from "@/features/jobs/components/placeholder";
 import { Heading } from "@/shared/components/header/heading";
 import type { RouteParams } from "@/shared/types/global";
 import { Suspense } from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Jobs",
+  description: "Jobs in the community",
+};
 
 const Jobs = async ({ searchParams }: RouteParams) => {
   const { query, location, page } = await searchParams;
@@ -23,7 +30,7 @@ const Jobs = async ({ searchParams }: RouteParams) => {
       </section>
 
       <section className="mt-12">
-        <Suspense fallback={<div>Loading</div>}>
+        <Suspense fallback={<Placeholder />}>
           <JobList query={query} location={location} page={page} />
         </Suspense>
       </section>

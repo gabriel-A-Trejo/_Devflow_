@@ -37,12 +37,12 @@ const Stats = ({
 }: Props) => {
   return (
     <div className="mt-10">
-      <h4 className="font-bold text-xl">
+      <h3 className="font-bold text-xl">
         Stats{" "}
         <span className="small-semibold text-primary">
           {formatNumber(reputationPoints)}
         </span>
-      </h4>
+      </h3>
 
       <div className="xs:grid-cols-2 mt-5 grid grid-cols-1 gap-5 md:grid-cols-4">
         <div className=" flex flex-wrap items-center justify-evenly gap-4 rounded-md border  p-6">

@@ -9,6 +9,52 @@ import { TagQuestionFilters } from "@/shared/constants/filters";
 import ROUTES from "@/shared/constants/routes";
 import { EMPTY_QUESTION } from "@/shared/constants/states";
 import type { RouteParams } from "@/shared/types/global";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: RouteParams): Promise<Metadata> {
+  const { id } = await params;
+
+  if (!id) {
+    return {
+      title: "Tag not found | DevFlow",
+      description: "This tag does not exist on DevFlow.",
+    };
+  }
+
+  const { success, data } = await getTagQuestion({
+    tagId: id,
+    page: 1,
+    pageSize: 1,
+  });
+
+  if (!success || !data?.tags) {
+    return {
+      title: "Tag not found | DevFlow",
+      description: "This tag does not exist on DevFlow.",
+    };
+  }
+
+  const tagName = data.tags.name;
+  const title = `Questions tagged "${tagName}" - DevFlow`;
+  const description = `Browse questions and answers related to "${tagName}" on DevFlow.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
+  };
+}
 
 const page = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;

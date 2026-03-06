@@ -9,6 +9,12 @@ import ROUTES from "@/shared/constants/routes";
 import { EMPTY_USERS } from "@/shared/constants/states";
 import type { RouteParams } from "@/shared/types/global";
 import Pagination from "@/shared/components/pagination/Pagination";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Community",
+  description: "Community of developers",
+};
 
 const Community = async ({ searchParams }: RouteParams) => {
   const { page, pageSize, query, filter } = await searchParams;

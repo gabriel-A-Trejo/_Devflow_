@@ -1,3 +1,4 @@
+// src/shared/components/navigation/navbar/index.tsx
 import { auth } from "@/auth";
 import Logo from "./logo";
 import MobileNavigation from "./mobile-navigation";
@@ -9,11 +10,11 @@ const Navbar = async () => {
   const session = await auth();
 
   return (
-    <nav className="flex-between bg-background fixed z-50 w-full p-6 sm:px-12 gap-5 ">
+    <nav className="flex-between bg-background fixed z-50 w-full p-6 sm:px-12 gap-5">
       <Logo isNavbar />
       <GlobalSearch />
+
       <div className="flex-between gap-5">
-        <ThemeToggle />
         {session?.user?.id && (
           <UserAvatar
             id={session.user.id}
@@ -21,6 +22,7 @@ const Navbar = async () => {
             imageUrl={session.user?.image}
           />
         )}
+        <ThemeToggle />
         <MobileNavigation />
       </div>
     </nav>

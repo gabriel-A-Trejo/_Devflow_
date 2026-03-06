@@ -5,6 +5,12 @@ import { Heading } from "@/shared/components/header/heading";
 import ROUTES from "@/shared/constants/routes";
 import type { User } from "@/shared/types/global";
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Edit Profile",
+  description: "Edit profile of the user",
+};
 
 const profileEditPage = async () => {
   const sesssion = await auth();

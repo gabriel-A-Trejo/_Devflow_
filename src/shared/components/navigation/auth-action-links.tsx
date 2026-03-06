@@ -34,6 +34,7 @@ const AuthActionLinks = ({
                 buttonVariants({ variant: "default" }),
                 "flex items-center gap-3 rounded-lg w-full cursor-pointer py-5",
               )}
+              aria-label="Logout"
             >
               {!isMobile && <LogOut className="lg:hidden" />}
               <span className={clsx(!isMobile && "max-lg:hidden")}>Logout</span>

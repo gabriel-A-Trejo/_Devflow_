@@ -22,7 +22,7 @@ import TagCard from "@/features/tags/components/tag-card";
 import { createQuestion, EditQuestion } from "../actions/question.action";
 import { useRouter } from "next/navigation";
 import ROUTES from "@/shared/constants/routes";
-import { Question } from "@/shared/types/global";
+import type { Question } from "@/shared/types/global";
 
 const Editor = dynamic(() => import("@/shared/components/editor"), {
   ssr: false,

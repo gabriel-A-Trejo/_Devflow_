@@ -24,9 +24,9 @@ const UserCard = ({ _id, name, image, username }: User) => {
             href={ROUTES.PROFILE(_id)}
             className="mt-5 space-y-1 focus:outline-none"
           >
-            <h3 className="text-xl font-semibold leading-tight line-clamp-1">
+            <p className="text-xl font-semibold leading-tight line-clamp-1">
               {name}
-            </h3>
+            </p>
             <p className="text-md text-muted-foreground line-clamp-1">
               @{username}
             </p>

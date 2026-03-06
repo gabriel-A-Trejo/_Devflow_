@@ -9,9 +9,16 @@ import ROUTES from "@/shared/constants/routes";
 import { EMPTY_QUESTION } from "@/shared/constants/states";
 import Pagination from "@/shared/components/pagination/Pagination";
 
+import type { Metadata } from "next";
+
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
+
+export const metadata: Metadata = {
+  title: "Saved Questions",
+  description: "Saved questions by the user",
+};
 
 const Collections = async ({ searchParams }: SearchParams) => {
   const { page, pageSize, query, filter } = await searchParams;

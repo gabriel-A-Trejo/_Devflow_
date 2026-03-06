@@ -16,7 +16,7 @@ import TagCard from "@/features/tags/components/tag-card";
 import Votes from "@/features/votes/components/votes";
 import { Heading } from "@/shared/components/header/heading";
 import UserAvatar from "@/shared/components/navigation/navbar/userAvatar";
-import { Spinner } from "@/shared/components/ui";
+
 import ROUTES from "@/shared/constants/routes";
 import type { RouteParams, Tags } from "@/shared/types/global";
 import { Clock3, Eye, MessageCircle } from "lucide-react";
@@ -25,6 +25,44 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { Suspense } from "react";
+import SavePlaceholder from "@/features/question/components/save-placeholder";
+import VotePlaceholder from "@/features/votes/components/vote-placeholder";
+import type { Metadata } from "next";
+
+export const revalidate = 3600;
+
+export async function generateMetadata({
+  params,
+}: RouteParams): Promise<Metadata> {
+  const { id } = await params;
+
+  const { success, data: question } = await getQuestionById({ questionId: id });
+
+  if (!success || !question) {
+    return {
+      title: "Question not found",
+      description: "This question does not exist",
+    };
+  }
+
+  const description = question.content.slice(0, 160);
+
+  return {
+    title: question.title,
+    description,
+    openGraph: {
+      title: question.title,
+      description,
+      type: "article",
+      authors: [question.author.name],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: question.title,
+      description,
+    },
+  };
+}
 
 const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
   const [{ id }, { page, pageSize, filter }] = await Promise.all([
@@ -75,7 +113,7 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
             </Link>
           </div>
           <div className="flex justify-end gap-4">
-            <Suspense fallback={<Spinner />}>
+            <Suspense fallback={<VotePlaceholder />}>
               <Votes
                 upvotes={question.upvotes}
                 downvotes={question.downvotes}
@@ -85,7 +123,7 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
                 hasVotedPromise={hasVotedPromise}
               />
             </Suspense>
-            <Suspense fallback={<Spinner />}>
+            <Suspense fallback={<SavePlaceholder />}>
               <SaveQuestion
                 questionId={question._id}
                 hasSavedQuestionPromise={hasSavedQuestionPromise}

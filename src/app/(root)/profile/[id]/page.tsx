@@ -29,6 +29,50 @@ import AnswerCard from "@/features/answer/components/answer-card";
 import { getUserTags } from "@/features/tags/actions/get-user-tags.action";
 import TagCard from "@/features/tags/components/tag-card";
 import ROUTES from "@/shared/constants/routes";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: RouteParams): Promise<Metadata> {
+  const { id } = await params;
+
+  if (!id) {
+    return {
+      title: "User not found | DevFlow",
+      description: "This developer profile does not exist on DevFlow.",
+    };
+  }
+
+  const { success, data } = await getUser({ userId: id });
+
+  if (!success || !data?.user) {
+    return {
+      title: "User not found | DevFlow",
+      description: "This developer profile does not exist on DevFlow.",
+    };
+  }
+
+  const { name, username, bio } = data.user;
+  const title = `${name} (@${username}) - DevFlow Profile`;
+  const description =
+    bio?.slice(0, 160) ||
+    `View ${name}'s questions, answers and activity on DevFlow.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "profile",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
+  };
+}
 
 const Profile = async ({ params, searchParams }: RouteParams) => {
   const [{ id }, { page: rawPage, pageSize: rawPageSize }] = await Promise.all([
@@ -124,18 +168,10 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
       <section className="mt-10 flex gap-10">
         <Tabs defaultValue="top-posts" className="flex-[2]">
           <TabsList className="min-h-[42px] p-1">
-            <TabsTrigger
-              value="top-posts"
-              className="data-[state=active]:text-primary dark:data-[state=active]:text-primary"
-            >
+            <TabsTrigger value="top-posts" className="">
               Top Posts
             </TabsTrigger>
-            <TabsTrigger
-              value="answers"
-              className="data-[state=active]:text-primary dark:data-[state=active]:text-primary"
-            >
-              Answers
-            </TabsTrigger>
+            <TabsTrigger value="answers">Answers</TabsTrigger>
           </TabsList>
 
           <TabsContent

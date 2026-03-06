@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import EditDeleteAction from "@/features/user/components/edit-delete-action";
 import { cn } from "@/shared/lib/utils";
+import VotePlaceholder from "@/features/votes/components/vote-placeholder";
 
 interface Props extends Answer {
   containerClasses?: string;
@@ -68,7 +69,7 @@ const AnswerCard = ({
                 Answered {getTimeStamp(createdAt)}
               </p>
             </div>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<VotePlaceholder />}>
               <Votes
                 targetType="answer"
                 targetId={_id}

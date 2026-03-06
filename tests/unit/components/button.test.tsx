@@ -23,6 +23,6 @@ describe("button Component - TDD", () => {
 
   it("should render the button with correct disabled state", () => {
     render(<Button disabled>Click me</Button>);
-    expect(screen.getByText("Click me")).toHaveAttribute("disabled");
+    expect(screen.getByRole("button")).toBeDisabled();
   });
 });

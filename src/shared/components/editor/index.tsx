@@ -36,18 +36,19 @@ import "@mdxeditor/editor/style.css";
 import "./dark-editor.css";
 
 interface Props {
+  id?: string;
   value: string;
   editorRef: Ref<MDXEditorMethods> | null;
   fieldChange: (value: string) => void;
 }
 
-const Editor = ({ value, editorRef, fieldChange }: Props) => {
+const Editor = ({ id, value, editorRef, fieldChange }: Props) => {
   const { resolvedTheme } = useTheme();
 
   const themeExtension = resolvedTheme === "dark" ? [basicDark] : [];
 
   return (
-    <div className="min-h-80 border ">
+    <div className="min-h-80 border " id={id}>
       <MDXEditor
         key={resolvedTheme}
         markdown={value}

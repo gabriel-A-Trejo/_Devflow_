@@ -127,7 +127,9 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
   return (
     <form
       className="flex w-full flex-col gap-10"
-      onSubmit={form.handleSubmit(handleCreateQuestion)}
+      onSubmit={form.handleSubmit(handleCreateQuestion)} noValidate
+
+
     >
       <Controller
         name="title"
@@ -158,10 +160,11 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
         control={form.control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>
+            <FieldLabel htmlFor="content">
               Question Details <span className="text-primary">*</span>
             </FieldLabel>
             <Editor
+              id="content"
               value={field.value}
               editorRef={editorRef}
               fieldChange={field.onChange}

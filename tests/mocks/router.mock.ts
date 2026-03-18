@@ -1,0 +1,11 @@
+const mockRouter = {
+  replace: jest.fn(),
+  back: jest.fn(),
+  forward: jest.fn(),
+  push: jest.fn(),
+  prefetch: jest.fn(),
+};
+
+const mockUseRouter = jest.fn(() => mockRouter);
+
+export { mockUseRouter, mockRouter };

@@ -1,30 +1,66 @@
 import type { Config } from "jest";
 import nextJest from "next/jest.js";
 
-const createJestConfig = nextJest({
-  // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
-  dir: "./",
-});
+const createJestConfig = nextJest({ dir: "./" });
 
-// Add any custom config to be passed to Jest
+const moduleNameMapper = {
+  "^@/(.*)$": "<rootDir>/src/$1",
+};
+
 const config: Config = {
+  verbose: true,
+  projects: [
+    {
+      displayName: "client",
+      testEnvironment: "jsdom",
+      clearMocks: true,
+      testMatch: [
+        "**/tests/unit/**/*.+(test|spec).[jt]s?(x)",
+        "**/tests/integration/**/*.client.+(test|spec).[jt]s?(x)",
+        "**/*.client.+(test|spec).[jt]s?(x)",
+      ],
+      transform: {
+        "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
+      },
+      moduleNameMapper,
+      setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+      testPathIgnorePatterns: [".*\\.server\\.(test|spec)\\.[jt]s?(x)$"],
+    },
+    {
+      displayName: "server",
+      testEnvironment: "node",
+      clearMocks: true,
+      maxWorkers: 1,
+
+      transform: {
+        "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
+      },
+      transformIgnorePatterns: [
+        "/node_modules/(?!(next-auth|@auth/core|oauth4webapi)/)",
+      ],
+      moduleNameMapper,
+
+      setupFilesAfterEnv: ["<rootDir>/jest.server.setup.ts"],
+      testMatch: [
+        "**/tests/integration/**/*.server.+(test|spec).[jt]s?(x)",
+        "**/*.server.+(test|spec).[jt]s?(x)",
+      ],
+      testPathIgnorePatterns: [".*\\.client\\.(test|spec)\\.[jt]s?(x)$"],
+    },
+  ],
   coverageProvider: "v8",
-  testEnvironment: "jsdom",
   clearMocks: true,
   collectCoverage: true,
   coverageDirectory: "coverage",
+  coverageReporters: ["html", ["text", { skipFull: true }], "text-summary"],
   collectCoverageFrom: [
-    "components/**/*.{js, jsx, ts, tsx}",
-    "lib/**/*.{js, ts}",
-    "!**/*.d.ts",
-    "!**/node_modules/**",
-    "!**/*.test.{js,jsx,ts,tsx}",
+    "src/**/*.{js,jsx,ts,tsx}",
+    "!src/**/*.d.ts",
+    "!src/**/node_modules/**",
+    "!src/**/*.test.{js,jsx,ts,tsx}",
+    "!src/**/*.client.{test,spec}.{js,jsx,ts,tsx}",
+    "!src/**/*.server.{test,spec}.{js,jsx,ts,tsx}",
   ],
-  moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/$1",
-  },
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
 };
 
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
 export default createJestConfig(config);

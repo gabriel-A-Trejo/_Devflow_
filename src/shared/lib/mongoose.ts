@@ -2,10 +2,6 @@ import mongoose, { type Mongoose } from "mongoose";
 import logger from "./logger";
 import "@/database";
 
-const MONGOOSEDB_URI = process.env.MONGODB_URI as string;
-
-if (!MONGOOSEDB_URI) throw new Error("MONGODB_URI is not defined");
-
 interface MongooseCache {
   conn: Mongoose | null;
   promise: Promise<Mongoose> | null;
@@ -22,6 +18,21 @@ if (!cached) {
 }
 
 const dbConnect = async (): Promise<Mongoose> => {
+  if (!global._mongoose) {
+    global._mongoose = { conn: null, promise: null };
+  }
+  const cached = global._mongoose;
+
+  if (mongoose.connection.readyState === 1) {
+    cached.conn = mongoose;
+    return mongoose;
+  }
+
+  const MONGOOSEDB_URI = process.env.MONGODB_URI as string | undefined;
+  if (!MONGOOSEDB_URI) {
+    throw new Error("MONGODB_URI is not defined");
+  }
+
   if (cached.conn) {
     logger.info("Using existing mongoose connection");
     return cached.conn;

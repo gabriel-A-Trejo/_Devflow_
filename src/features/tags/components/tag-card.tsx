@@ -104,20 +104,20 @@ const TagCard = ({
 
             {/* Icon */}
             <i
-              className={cn(iconClass, "text-2xl text-muted-foreground")}
+              className={cn(iconClass, "text-2xl")}
               aria-hidden="true"
             />
           </div>
 
           {/* Description */}
-          <p className="mt-4 text-sm text-muted-foreground line-clamp-3">
+          <p className="mt-4 text-sm  line-clamp-3">
             {iconDescription}
           </p>
 
           {/* Questions count */}
           {questions! > 0 && (
-            <p className="mt-3 text-xs text-muted-foreground">
-              <span className="text-primary font-semibold mr-1">
+            <p className="mt-3 text-xs">
+              <span className="text-blue-400 font-semibold mr-1">
                 {questions}+
               </span>
               Questions

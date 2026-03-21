@@ -15,10 +15,17 @@ interface NavLinksProps {
 
 const NavLinks = ({ isMobileNav = false, userId }: NavLinksProps) => {
   const pathname = usePathname();
+  const isAuthenticated = Boolean(userId);
+
+  const visibleLinks = navigationLinks.filter((item) => {
+    if (isAuthenticated) return true;
+
+    return item.route !== ROUTES.PROFILES && item.route !== ROUTES.COLLECTIONS;
+  });
 
   return (
     <>
-      {navigationLinks.map((item) => {
+      {visibleLinks.map((item) => {
         const Icon = item.icon;
 
         const route =

@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DevFlow
+
+DevFlow is a full-stack Q&A platform built with Next.js App Router, MongoDB, and NextAuth.
+It includes authentication, question/answer flows, voting, tags, collections, search, and AI-assisted answer generation.
+
+## Tech Stack
+
+- Next.js 16 (App Router)
+- React 19 + TypeScript
+- MongoDB + Mongoose
+- NextAuth v5 (credentials + OAuth)
+- Tailwind CSS 4
+- Biome (lint/format)
+- Jest + Testing Library
+
+## Prerequisites
+
+- Node.js 20+
+- pnpm 10+
+- MongoDB instance (local or hosted)
 
 ## Getting Started
 
-First, run the development server:
+1. Install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Create a `.env.local` file in the project root.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Add required environment variables:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+MONGODB_URI=
+AUTH_SECRET=
 
-## Learn More
+# OAuth (if using Google/GitHub sign-in)
+AUTH_GOOGLE_ID=
+AUTH_GOOGLE_SECRET=
+AUTH_GITHUB_ID=
+AUTH_GITHUB_SECRET=
 
-To learn more about Next.js, take a look at the following resources:
+# Optional
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3000/api
+LOG_LEVEL=info
+X_RapidAPI_Key=
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. Start the development server:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm dev
+```
 
-## Deploy on Vercel
+5. Open http://localhost:3000
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Available Scripts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pnpm dev
+pnpm build
+pnpm start
+pnpm lint
+pnpm format
+pnpm test
+pnpm test:watch
+pnpm test:coverage
+pnpm test:unit
+pnpm test:integration
+```
+
+## Project Structure
+
+```text
+src/
+	app/          # App Router pages, layouts, API routes
+	features/     # Domain features (auth, questions, answers, tags, votes, etc.)
+	database/     # Mongoose models and DB entrypoints
+	shared/       # Reusable UI, utilities, constants, types
+tests/          # Unit, integration, and e2e tests
+```
+
+## Build for Production
+
+```bash
+pnpm build
+pnpm start
+```
+
+## Notes
+
+- If you see inconsistent Next.js worker/runtime errors locally, clear caches and reinstall:
+
+```bash
+rm -rf node_modules .next
+pnpm store prune
+pnpm install
+```

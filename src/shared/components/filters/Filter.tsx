@@ -31,6 +31,7 @@ interface Props {
 const Filter = ({
   filters,
   queryKey = "filter",
+  defaultLabel = "Select a Filter",
   showToggleOnly = false,
 }: Props) => {
   const router = useRouter();
@@ -79,11 +80,8 @@ const Filter = ({
 
       <div className={cn(showToggleOnly ? "block mt-4" : "sm:hidden mt-4")}>
         <Select value={activeFilter || undefined} onValueChange={updateFilter}>
-          <SelectTrigger className="p-4 w-full">
-            <SelectValue
-              placeholder="Select a Filter"
-              aria-label="filter-options"
-            />
+          <SelectTrigger className="p-4 w-full" aria-label={defaultLabel}>
+            <SelectValue placeholder={defaultLabel} />
           </SelectTrigger>
 
           <SelectContent>

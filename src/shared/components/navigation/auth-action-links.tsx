@@ -50,8 +50,10 @@ const AuthActionLinks = ({
                 buttonVariants({ variant: "outline" }),
                 "flex items-center gap-2 rounded-lg",
               )}
+              aria-label="Log in"
             >
-              {!isMobile && <LogIn className="lg:hidden" aria-hidden />}
+              {!isMobile && <LogIn className="lg:hidden" aria-hidden="true" />}
+              <span className="sr-only">Log in</span>
               <span className={clsx(!isMobile && "max-lg:hidden")}>Log in</span>
             </Link>
           </Wrapper>
@@ -63,8 +65,10 @@ const AuthActionLinks = ({
                 buttonVariants({ variant: "default" }),
                 "flex items-center gap-2 rounded-lg",
               )}
+              aria-label="Sign up"
             >
-              {!isMobile && <UserPlus className="lg:hidden" aria-hidden />}
+              {!isMobile && <UserPlus className="lg:hidden" aria-hidden="true" />}
+              <span className="sr-only">Sign up</span>
               <span className={clsx(!isMobile && "max-lg:hidden")}>
                 Sign Up
               </span>

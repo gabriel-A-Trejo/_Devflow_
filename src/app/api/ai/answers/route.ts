@@ -1,3 +1,5 @@
+export const runtime = "edge";
+
 import { AIAnswerSchema } from "@/features/answer/schema/ai-answer-schema";
 import handleError from "@/shared/lib/handlers/errors";
 import { ValidationError } from "@/shared/lib/http-errors";
